@@ -26,6 +26,5 @@ public class Member {
     @Column(nullable = false)
     private LocalDateTime createAt;
 
-    @Column(nullable = false)
     private String profileUrl;
 }
