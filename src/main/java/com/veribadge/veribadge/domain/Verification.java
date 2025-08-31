@@ -2,12 +2,14 @@ package com.veribadge.veribadge.domain;
 
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Verification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,8 @@ public class Verification {
 
     private String deniedReason;
 
-    public Verification(String certificateUrl, LocalDateTime submittedDate, VerificationStatus status){
+    public Verification(Member userId, String certificateUrl, LocalDateTime submittedDate, VerificationStatus status){
+        this.userId = userId;
         this.certificateUrl = certificateUrl;
         this.submittedDate = submittedDate;
         this.status = status;
