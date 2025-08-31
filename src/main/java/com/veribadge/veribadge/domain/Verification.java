@@ -4,6 +4,8 @@ import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 public class Verification {
@@ -20,12 +22,16 @@ public class Verification {
     private String certificateUrl;
 
     @Column(nullable = false)
+    private LocalDateTime submittedDate;
+
+    @Column(nullable = false)
     private VerificationStatus status;
 
     private String deniedReason;
 
-    public Verification(String certificateUrl, VerificationStatus status){
+    public Verification(String certificateUrl, LocalDateTime submittedDate, VerificationStatus status){
         this.certificateUrl = certificateUrl;
+        this.submittedDate = submittedDate;
         this.status = status;
     }
 }

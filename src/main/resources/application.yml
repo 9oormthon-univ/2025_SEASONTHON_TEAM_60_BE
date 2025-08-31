@@ -4,12 +4,9 @@ spring:
   profiles:
     active: dev
 
-  application:
-    name: veribadge
-
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
