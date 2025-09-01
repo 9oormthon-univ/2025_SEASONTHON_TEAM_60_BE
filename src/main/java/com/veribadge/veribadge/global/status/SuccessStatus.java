@@ -11,6 +11,9 @@ public enum SuccessStatus {
     SUCCESS(HttpStatus.OK, "COMMON 200", "요청이 성공적으로 처리되었습니다."),
     CREATED(HttpStatus.CREATED, "COMMON 201", "리소스가 성공적으로 생성되었습니다."),
 
+    // Main
+    MAIN_SUCCESS(HttpStatus.OK, "MAIN 201", "메인페이지 불러오기 성공"),
+
     // Member
     MEMBER_CREATED(HttpStatus.CREATED, "SIGNUP 201", "회원가입 성공"),
     LOGIN_SUCCESS(HttpStatus.OK, "LOGIN 200", "로그인 성공"),
