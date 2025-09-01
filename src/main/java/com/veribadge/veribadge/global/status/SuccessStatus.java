@@ -17,7 +17,11 @@ public enum SuccessStatus {
     // Member
     MEMBER_CREATED(HttpStatus.CREATED, "SIGNUP 201", "회원가입 성공"),
     LOGIN_SUCCESS(HttpStatus.OK, "LOGIN 200", "로그인 성공"),
-    LOGOUT_SUCCESS(HttpStatus.OK, "LOGOUT 200", "로그아웃 성공");
+    LOGOUT_SUCCESS(HttpStatus.OK, "LOGOUT 200", "로그아웃 성공"),
+
+    // MyBadge
+    MY_BADGE_SUCCESS(HttpStatus.OK, "MYBADGE 200", "나의 뱃지 페이지 불러오기 성공"),
+    CHANNEL_CONNECTED(HttpStatus.OK, "MYBADGE 200", "유튜브 채널 연결 성공");
 
     private final HttpStatus status;
     private final String code;
