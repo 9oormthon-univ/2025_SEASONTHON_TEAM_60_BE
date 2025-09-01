@@ -4,9 +4,11 @@ import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.domain.enums.Role;
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
+@Getter
 @AllArgsConstructor
 public class DashboardResponseDto {
     private String username;
