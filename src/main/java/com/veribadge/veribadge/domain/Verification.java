@@ -27,6 +27,7 @@ public class Verification {
     private LocalDateTime submittedDate;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private VerificationStatus status;
 
     private String deniedReason;
