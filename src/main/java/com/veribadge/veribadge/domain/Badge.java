@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "badge")
 @NoArgsConstructor
 @Getter
 public class Badge {

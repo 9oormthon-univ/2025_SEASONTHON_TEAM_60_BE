@@ -1,15 +1,12 @@
 package com.veribadge.veribadge.service;
 
-import com.veribadge.veribadge.domain.BadgeMatch;
-import com.veribadge.veribadge.domain.enums.BadgeLevel;
+import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.dto.BadgeVerifyResponseDto;
 import com.veribadge.veribadge.repository.BadgeMatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +17,7 @@ public class BadgeMatcherService {
     public BadgeVerifyResponseDto verifyBadgeTag(String tag, String channelUrl) {
         String normalized = normalizeChannelUrl(channelUrl);
 
-        Optional<BadgeMatch> matchOpt = badgeMatchRepository.findByTagAndChannelUrl(tag, normalized);
+        Optional<Badge> matchOpt = badgeMatchRepository.findByVerifiedTagAndChannelUrl(tag, normalized);
 
         return matchOpt
                 .map(match -> new BadgeVerifyResponseDto(match.getBadgeLevel(), true)) // enum으로 바로 사용
