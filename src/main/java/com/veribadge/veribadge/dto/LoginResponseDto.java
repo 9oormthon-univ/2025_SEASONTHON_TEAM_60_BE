@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString
 @Schema(description = "로그인 성공 응답 데이터")
 public class LoginResponseDto {
@@ -20,14 +19,12 @@ public class LoginResponseDto {
     @Schema(description = "사용자 실명", example = "홍길동")
     private String username;
 
-    @Schema(description = "로그인 성공 메시지", example = "로그인에 성공했습니다.")
-    private String message;
+
 
     public LoginResponseDto(Member member) {
         this.userId = member.getUserId();
         this.username = member.getUsername();
         this.kakaoId = member.getKakaoId();
-        this.message = "로그인에 성공했습니다.";
     }
 
 

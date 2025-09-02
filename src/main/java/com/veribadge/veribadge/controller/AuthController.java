@@ -52,7 +52,7 @@ public class AuthController {
         Member member = memberRepository.findByKakaoId(kakaoId)
                 .orElseGet(() -> {
                     // 신규 회원일 경우 자동 가입
-                    String username = userInfo.getKakao_account().getName();
+                    String username = userInfo.getKakaoAccount().getName();
                     log.info("신규 회원입니다. 이름 '{}'(으)로 자동 가입합니다.", username);
                     return memberRepository.save(Member.builder()
                             .kakaoId(kakaoId)
