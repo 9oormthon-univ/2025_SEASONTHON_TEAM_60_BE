@@ -7,10 +7,7 @@ import com.veribadge.veribadge.service.MyBadgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("my-badge")
@@ -22,15 +19,15 @@ public class MyBadgeController {
 
     @Operation(summary = "나의 뱃지 관리 조회")
     @GetMapping
-    public Response<MyBadgeResponseDto> getMyBadge(){
-        MyBadgeResponseDto dto = myBadgeService.getMyBadge();
+    public Response<MyBadgeResponseDto> getMyBadge(@RequestParam("userId") Long userId){
+        MyBadgeResponseDto dto = myBadgeService.getMyBadge(userId);
         return Response.success(SuccessStatus.MY_BADGE_SUCCESS, dto);
     }
 
-    @Operation(summary = "Youtube 채널 연결")
-    @PostMapping("/connect-url")
-    public Response<Object> connectChannel(){
-
-        return Response.success(SuccessStatus.SUCCESS, null); // Todo : 성공 상태 변경
-    }
+//    @Operation(summary = "Youtube 채널 연결")
+//    @PostMapping("/connect-url")
+//    public Response<Object> connectChannel(){
+//
+//        return Response.success(SuccessStatus.SUCCESS, null); // Todo : 성공 상태 변경
+//    }
 }

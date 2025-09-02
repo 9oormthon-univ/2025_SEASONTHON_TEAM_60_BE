@@ -23,8 +23,8 @@ public class MainService {
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
 
-    public DashboardResponseDto getMyBadge() throws CustomException {
-        Member member = memberRepository.findByEmail("test1@example.com") // FIXME : 지금은 하드코딩, 로그인 구현 후 수정 예정
+    public DashboardResponseDto getMyBadge(Long userId) {
+        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Optional<Verification> verification = verificationRepository.findByUserId(member);
