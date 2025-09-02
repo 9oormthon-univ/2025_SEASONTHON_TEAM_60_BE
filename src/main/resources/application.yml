@@ -1,13 +1,22 @@
-## application.yml
+iam-a-dummy-text: for-testing
 
 spring:
-  profiles:
-    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/veribadge?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: veribadge
+    password: veribadge12!
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+
+
+kakao:
+  client-id: 8dc7dc2b3344409fae4b411a1e477ce0
+  redirect_uri: http://localhost:8080/auth/kakao/callback

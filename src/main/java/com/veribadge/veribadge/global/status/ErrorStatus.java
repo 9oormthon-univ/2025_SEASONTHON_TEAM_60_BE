@@ -16,7 +16,11 @@ public enum ErrorStatus {
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON 404", "찾을 수 없는 리소스입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON 404", "사용자를 찾을 수 없습니다"),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON 404", "사용자를 찾을 수 없습니다."),
-    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "COMMON 405", "허용되지 않는 HTTP Method입니다.");
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "COMMON 405", "허용되지 않는 HTTP Method입니다."),
+
+    // Kakao Login 에러
+    KAKAO_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH5001", "카카오 API 연동 중 오류가 발생했습니다."),
+    JSON_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH5002", "JSON 파싱 중 오류가 발생했습니다.");
 
     // Member
 
