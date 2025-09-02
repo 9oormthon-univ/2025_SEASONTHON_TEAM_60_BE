@@ -14,7 +14,10 @@ public enum SuccessStatus {
     // Member
     MEMBER_CREATED(HttpStatus.CREATED, "SIGNUP 201", "회원가입 성공"),
     LOGIN_SUCCESS(HttpStatus.OK, "LOGIN 200", "로그인 성공"),
-    LOGOUT_SUCCESS(HttpStatus.OK, "LOGOUT 200", "로그아웃 성공");
+    LOGOUT_SUCCESS(HttpStatus.OK, "LOGOUT 200", "로그아웃 성공"),
+
+    //Badge
+    BADGE_MATCH_SUCCESS(HttpStatus.OK, "BADGE 200", "뱃지 매칭이 완료되었습니다.");
 
     private final HttpStatus status;
     private final String code;

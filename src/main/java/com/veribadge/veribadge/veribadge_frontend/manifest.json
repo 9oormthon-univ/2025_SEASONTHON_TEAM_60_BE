@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "VeriBadge",
+  "version": "1.0",
+  "description": "유튜브 댓글에서 @veri-태그를 감지하여 배지를 보여줍니다.",
+  "permissions": ["storage","scripting","tabs"],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "http://localhost:8080/*",
+    "http://127.0.0.1:8080/*"
+  ],
+  "action": { "default_popup": "popup/popup.html", "default_icon": "icons/icon.png" },
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    { "matches": ["https://www.youtube.com/*"], "js": ["contentScript.js"], "run_at": "document_idle" }
+  ],
+  "web_accessible_resources": [
+    { "resources":
+    ["images/silver.png",
+      "images/gold.png",
+      "images/platinum.png",
+      "images/diamond.png",
+      "images/default.png"
+    ],
+      "matches": ["<all_urls>"] }
+  ]
+}
