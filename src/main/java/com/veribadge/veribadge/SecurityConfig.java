@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults; // ⚠️ 꼭 필요!
+import static org.springframework.security.config.Customizer.withDefaults; // 꼭 필요!
 
 @Configuration
 public class SecurityConfig {

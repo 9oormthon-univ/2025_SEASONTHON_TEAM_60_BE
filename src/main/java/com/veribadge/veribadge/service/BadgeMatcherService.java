@@ -1,6 +1,7 @@
 package com.veribadge.veribadge.service;
 
 import com.veribadge.veribadge.domain.BadgeMatch;
+import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.dto.BadgeVerifyResponseDto;
 import com.veribadge.veribadge.repository.BadgeMatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,12 @@ public class BadgeMatcherService {
 
     public BadgeVerifyResponseDto verifyBadgeTag(String tag, String channelUrl) {
         String normalized = normalizeChannelUrl(channelUrl);
-        return badgeMatchRepository.findByTagAndChannelUrl(tag, normalized)
-                .map(m -> new BadgeVerifyResponseDto(m.getBadgeId(), true))
-                .orElseGet(() -> new BadgeVerifyResponseDto("default", false));
+
+        Optional<BadgeMatch> matchOpt = badgeMatchRepository.findByTagAndChannelUrl(tag, normalized);
+
+        return matchOpt
+                .map(match -> new BadgeVerifyResponseDto(match.getBadgeLevel(), true)) // ✅ enum으로 바로 사용
+                .orElseGet(() -> new BadgeVerifyResponseDto(null, false));            // ❌ 없으면 null로 응답
     }
 
     // 전달된 URL을 항상 "www.youtube.com/@핸들" 포맷으로 정규화

@@ -1,5 +1,6 @@
 package com.veribadge.veribadge.domain;
 
+import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,13 +26,14 @@ public class BadgeMatch {
     private String channelUrl;
 
     // 티어 등급 (예: silver, gold, ...)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String badgeId;
+    private BadgeLevel badgeLevel;
 
     @Builder
-    public BadgeMatch(String tag, String channelUrl, String badgeId) {
+    public BadgeMatch(String tag, String channelUrl, BadgeLevel badgeLevel) {
         this.tag = tag;
         this.channelUrl = channelUrl;
-        this.badgeId = badgeId;
+        this.badgeLevel = badgeLevel;
     }
 }

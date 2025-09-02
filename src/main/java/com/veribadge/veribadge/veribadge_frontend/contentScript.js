@@ -114,7 +114,7 @@ async function handleCommentNode(node) {
 
     if (!verify || !verify.valid) return;
 
-    const badgeUrl = getBadgeUrlByTier(verify.badgeId);
+    const badgeUrl = getBadgeUrlByTier(verify.badgeLevel);
     if (!badgeUrl) return;
 
     replaceTagWithBadge(commentTextElem, tag, badgeUrl);
