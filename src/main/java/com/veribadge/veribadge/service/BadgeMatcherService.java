@@ -2,7 +2,7 @@ package com.veribadge.veribadge.service;
 
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.dto.BadgeVerifyResponseDto;
-import com.veribadge.veribadge.repository.BadgeMatchRepository;
+import com.veribadge.veribadge.repository.BadgeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BadgeMatcherService {
 
-    private final BadgeMatchRepository badgeMatchRepository;
+    private final BadgeRepository badgeMatchRepository;
 
     public BadgeVerifyResponseDto verifyBadgeTag(String tag, String channelUrl) {
         String normalized = normalizeChannelUrl(channelUrl);
