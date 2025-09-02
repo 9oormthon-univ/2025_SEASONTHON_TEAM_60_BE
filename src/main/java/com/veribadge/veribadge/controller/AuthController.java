@@ -73,20 +73,6 @@ public class AuthController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-    /*
-    public String kakaoCallback(@RequestParam String code) {
-     String tokenInfo = kakaoService.getAccessToken(code);
-
-        //System.out.println("카카오가 보내준 인증 코드: " + code);
-        return "카카오 인증 완료! 받은 코드: " + tokenInfo;
-    }
-     */
-
-
-
-
-
-
 
 
 }

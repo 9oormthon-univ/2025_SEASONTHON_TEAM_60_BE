@@ -33,7 +33,6 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**",
                                 "/auth/kakao/callback",
-                                "/reissue",//Access 토큰 재발급
                                 "/favicon.ico",
                                 "/css/**",
                                 "/js/**",

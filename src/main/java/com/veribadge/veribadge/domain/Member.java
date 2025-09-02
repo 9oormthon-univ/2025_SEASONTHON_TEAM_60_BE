@@ -2,33 +2,31 @@ package com.veribadge.veribadge.domain;
 
 import com.veribadge.veribadge.domain.enums.Role;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "USER_ID")
     private Long userId;
 
     @Column(nullable = false, unique = true)
     private Long kakaoId;
 
+    @Column(nullable = false, length = 50)
+    private String email;
+
     @Column(nullable = false)
     private String username;
 
-    @Column(unique = true)
-    private String email;
 
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
@@ -36,14 +34,17 @@ public class Member {
     private LocalDateTime createdAt;
 
     @Builder
-    public Member(Long kakaoId, String username) {
+    public Member(Long kakaoId, String email, String username, Role role, LocalDateTime createdAt){
         this.kakaoId = kakaoId;
+        this.email = email;
         this.username = username;
-        this.role = Role.USER;
-        this.createdAt = LocalDateTime.now();
+        this.role = role;
+        this.createdAt = createdAt;
     }
+
 
     public void updateEmail(String email) {
         this.email = email;
     }
+
 }
