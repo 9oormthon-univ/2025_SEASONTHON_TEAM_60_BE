@@ -53,7 +53,7 @@ public class BadgeInitializer implements CommandLineRunner {
                     LocalDate.now(),
                     BadgeLevel.SILVER,
                     "Channel url 3",
-                    "@Veri-SILVER-dhlske"
+                    "@veri-silver-dhlske"
             ); badgesToSave.add(badge3);
         } else {
             log.info("{} 뱃지는 이미 존재합니다.", testEmail3);

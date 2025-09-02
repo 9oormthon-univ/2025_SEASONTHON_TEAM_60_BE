@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
     Optional<Badge> findByVerificationId(Verification verificationId);
+    boolean existsByVerifiedTag(String verifiedTag);
 }
