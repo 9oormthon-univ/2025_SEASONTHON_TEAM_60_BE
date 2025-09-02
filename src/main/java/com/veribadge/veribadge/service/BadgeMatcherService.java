@@ -23,8 +23,8 @@ public class BadgeMatcherService {
         Optional<BadgeMatch> matchOpt = badgeMatchRepository.findByTagAndChannelUrl(tag, normalized);
 
         return matchOpt
-                .map(match -> new BadgeVerifyResponseDto(match.getBadgeLevel(), true)) // ✅ enum으로 바로 사용
-                .orElseGet(() -> new BadgeVerifyResponseDto(null, false));            // ❌ 없으면 null로 응답
+                .map(match -> new BadgeVerifyResponseDto(match.getBadgeLevel(), true)) // enum으로 바로 사용
+                .orElseGet(() -> new BadgeVerifyResponseDto(null, false));            // 없으면 null로 응답
     }
 
     // 전달된 URL을 항상 "www.youtube.com/@핸들" 포맷으로 정규화
