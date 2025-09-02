@@ -24,10 +24,11 @@ public class MyBadgeController {
         return Response.success(SuccessStatus.MY_BADGE_SUCCESS, dto);
     }
 
-//    @Operation(summary = "Youtube 채널 연결")
-//    @PostMapping("/connect-url")
-//    public Response<Object> connectChannel(){
-//
-//        return Response.success(SuccessStatus.SUCCESS, null); // Todo : 성공 상태 변경
-//    }
+    @Operation(summary = "Youtube 채널 연결 및 고유 태그 발급")
+    @PostMapping("/connect-url")
+    public Response<Object> connectChannel(@RequestParam("channelUrl") String channelUrl,
+                                           @RequestParam("userId") Long userId){
+        String badgeTag = myBadgeService.connectChannel(channelUrl, userId);
+        return Response.success(SuccessStatus.CHANNEL_CONNECTED, badgeTag);
+    }
 }

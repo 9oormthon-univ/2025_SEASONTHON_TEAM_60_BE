@@ -3,6 +3,7 @@ package com.veribadge.veribadge.service;
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
+import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +58,48 @@ public class MyBadgeService {
                         member.getEmail(),
                         verification.get().getStatus()
                 ));
+    }
+
+    public String connectChannel(String channelUrl, Long userId){
+        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        Verification verification = verificationRepository.findByUserId(member)
+                .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
+
+        Badge badge = badgeRepository.findByVerificationId(verification)
+                .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
+
+        BadgeLevel badgeLevel = badge.getBadgeLevel();
+
+        String badgeTag;
+
+        do {
+            badgeTag = switch (badgeLevel) {
+                case SILVER -> "@veri-silver-" + RandomStringGenerator();
+                case GOLD -> "@veri-gold-" + RandomStringGenerator();
+                case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
+                case DIAMOND -> "@veri-diamon-" + RandomStringGenerator();
+            };
+        } while (badgeRepository.existsByVerifiedTag(badgeTag));
+
+        badge.connect(channelUrl, badgeTag);
+
+        badgeRepository.save(badge);
+        return badgeTag;
+    }
+
+    public String RandomStringGenerator() {
+        int length = 6;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+        return sb.toString();
     }
 }

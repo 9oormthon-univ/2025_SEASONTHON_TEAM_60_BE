@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
     Optional<Badge> findByVerificationId(Verification verificationId);
+    boolean existsByVerifiedTag(String verifiedTag);
 
     // tag + channelUrl이 모두 일치하는 경우에만 인정
     Optional<Badge> findByVerifiedTagAndChannelUrl(String verifiedTag, String channelUrl);
