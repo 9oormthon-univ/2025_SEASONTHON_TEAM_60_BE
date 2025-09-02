@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "badge")
 @NoArgsConstructor
 @Getter
 public class Badge {
@@ -22,9 +23,9 @@ public class Badge {
 
     private String channelUrl;
 
-    @Column(nullable = false)
     private String verifiedTag;
 
+    @Column(nullable = false)
     private LocalDate verifiedDate;
 
     @Column(nullable = false)
@@ -45,7 +46,8 @@ public class Badge {
         this.verifiedDate = verifiedDate;
         this.badgeLevel = badgeLevel;
     }
-    public Badge(String channelUrl, String verifiedTag){
+
+    public void connect(String channelUrl, String verifiedTag) {
         this.channelUrl = channelUrl;
         this.verifiedTag = verifiedTag;
     }

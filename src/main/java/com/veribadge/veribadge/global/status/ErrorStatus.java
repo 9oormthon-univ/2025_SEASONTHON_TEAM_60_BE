@@ -23,7 +23,7 @@ public enum ErrorStatus {
     // Verification
 
     VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "인증을 찾을 수 없습니다."),
-
+    BADGE_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "뱃지를 찾을 수 없습니다."),
     // Member (USER_NOT_FOUND 삭제 및 MEMBER_NOT_FOUND 코드를 더 명확하게 수정)
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404_1", "사용자를 찾을 수 없습니다.");
 
