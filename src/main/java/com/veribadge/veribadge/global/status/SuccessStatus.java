@@ -19,9 +19,14 @@ public enum SuccessStatus {
     LOGIN_SUCCESS(HttpStatus.OK, "LOGIN 200", "로그인 성공"),
     LOGOUT_SUCCESS(HttpStatus.OK, "LOGOUT 200", "로그아웃 성공"),
 
+
+    //Badge
+    BADGE_MATCH_SUCCESS(HttpStatus.OK, "BADGE 200", "뱃지 매칭이 완료되었습니다."),
+
     // MyBadge
     MY_BADGE_SUCCESS(HttpStatus.OK, "MYBADGE 200", "나의 뱃지 페이지 불러오기 성공"),
     CHANNEL_CONNECTED(HttpStatus.OK, "MYBADGE 200", "유튜브 채널 연결 성공");
+
 
     private final HttpStatus status;
     private final String code;
