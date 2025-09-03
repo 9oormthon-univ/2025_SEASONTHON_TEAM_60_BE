@@ -19,7 +19,7 @@ public class Member {
     private Long userId;
 
     @Column(nullable = false, unique = true)
-    private Long kakaoId;
+    private Long kakaoId; // FIXME : 나중에 socialId로 변경하고 socialType 객체 생성하기
 
     @Column(nullable = false, length = 50)
     private String email;
