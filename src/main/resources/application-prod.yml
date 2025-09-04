@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: https://two025-seasonthon-team-60-be.onrender.com/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+              - https://www.googleapis.com/auth/youtube.readonly
+
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  redirect_uri: https://two025-seasonthon-team-60-be.onrender.com/auth/kakao/callback
