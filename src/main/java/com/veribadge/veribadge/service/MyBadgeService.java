@@ -9,7 +9,6 @@ import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
-import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MyBadgeService {
 
-    private final MemberRepository memberRepository;
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
     private final AuthService authService;
@@ -91,7 +89,6 @@ public class MyBadgeService {
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        // String email = "임시 하드코딩"; // FIXME !!
         badge.connect(channelUrl, badgeTag, email);
 
         badgeRepository.save(badge);
