@@ -2,6 +2,7 @@ package com.veribadge.veribadge.domain;
 
 import com.veribadge.veribadge.domain.enums.Role;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class Member {
     @Column(nullable = false, unique = true)
     private Long kakaoId;
 
-    @Column(nullable = false, length = 50)
+    @Column(unique = true, length = 50)
     private String email;
 
     @Column(nullable = false)
@@ -36,12 +37,11 @@ public class Member {
     private LocalDateTime createdAt;
 
     @Builder
-    public Member(Long kakaoId, String email, String username, Role role, LocalDateTime createdAt){
+    public Member(Long kakaoId, String username) {
         this.kakaoId = kakaoId;
-        this.email = email;
         this.username = username;
-        this.role = role;
-        this.createdAt = createdAt;
+        this.role = Role.USER;
+        this.createdAt = LocalDateTime.now();
     }
 
 

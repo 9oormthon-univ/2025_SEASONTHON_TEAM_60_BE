@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.veribadge.veribadge.dto.KakaoUserInfoDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class KakaoService {
 
     private final String KAKAO_API_KEY;
@@ -81,16 +83,21 @@ public class KakaoService {
     public KakaoUserInfoDto getUserInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        // 헤더에 'Bearer {accessToken}' 형식으로 인증 정보를 추가합니다.
         headers.set("Authorization", "Bearer " + accessToken);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(headers);
 
         try {
-            // 카카오 서버에 POST 요청을 보내 사용자 정보를 받습니다.
-            return restTemplate.postForObject("https://kapi.kakao.com/v2/user/me", requestEntity, KakaoUserInfoDto.class);
-        } catch (HttpClientErrorException e) {
+            String rawResponse = restTemplate.postForObject("https://kapi.kakao.com/v2/user/me", requestEntity, String.class);
+            log.info(">>>>> KAKAO API RAW RESPONSE: {} <<<<<", rawResponse);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(rawResponse, KakaoUserInfoDto.class);
+
+        } catch (HttpClientErrorException | JsonProcessingException e) { // 두 예외를 모두 잡도록 수정
+            log.error("카카오 사용자 정보 조회 실패: {}", e.getMessage());
+            // KAKAO_API_ERROR가 더 포괄적인 의미이므로 그대로 사용해도 좋습니다.
             throw new CustomException(ErrorStatus.KAKAO_API_ERROR);
         }
     }
