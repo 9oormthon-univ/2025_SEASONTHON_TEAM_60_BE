@@ -43,10 +43,4 @@ public class Member {
         this.role = role;
         this.createdAt = createdAt;
     }
-
-
-    public void updateEmail(String email) {
-        this.email = email;
-    }
-
 }
