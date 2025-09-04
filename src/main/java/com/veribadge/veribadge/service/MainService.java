@@ -5,10 +5,7 @@ import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.DashboardResponseDto;
-import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
-import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +16,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MainService {
 
-    private final MemberRepository memberRepository;
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
+    private final AuthService authService;
 
-    public DashboardResponseDto getMyBadge(Long userId) {
-        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
-                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+    public DashboardResponseDto getMyBadge() {
+        Member member = authService.getCurrentUser();
+        // Member member = memberRepository.findByUserId(userId)
+        //         .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Optional<Verification> verification = verificationRepository.findByUserId(member);
 

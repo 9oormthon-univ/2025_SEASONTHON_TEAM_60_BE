@@ -22,6 +22,7 @@ public enum ErrorStatus {
     // Auth (카카오 로그인 관련 에러 추가)
     KAKAO_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH 500", "카카오 API 연동 중 오류가 발생했습니다."),
     JSON_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH 500", "JSON 파싱 중 오류가 발생했습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH 401", "토큰이 유효하지 않습니다."),
 
     // Verification
     VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "인증을 찾을 수 없습니다."),

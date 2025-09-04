@@ -19,17 +19,16 @@ public class MyBadgeController {
 
     @Operation(summary = "나의 뱃지 관리 조회")
     @GetMapping
-    public Response<MyBadgeResponseDto> getMyBadge(@RequestParam("userId") Long userId){
-        MyBadgeResponseDto dto = myBadgeService.getMyBadge(userId);
+    public Response<MyBadgeResponseDto> getMyBadge(){
+        MyBadgeResponseDto dto = myBadgeService.getMyBadge();
         return Response.success(SuccessStatus.MY_BADGE_SUCCESS, dto);
     }
 
 //    @Operation(summary = "Youtube 채널 연결 및 고유 태그 발급")
 //    @PostMapping("/connect-url")
 //    public Response<Object> connectChannel(@RequestParam("channelUrl") String channelUrl,
-//                                           @RequestParam("email")
-//                                           @RequestParam("userId") Long userId){
-//        String badgeTag = myBadgeService.connectChannel(channelUrl, email, userId);
+//                                           @RequestParam("email")){
+//        String badgeTag = myBadgeService.connectChannel(channelUrl, email);
 //        return Response.success(SuccessStatus.CHANNEL_CONNECTED, badgeTag);
 //    }
 }
