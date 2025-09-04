@@ -9,6 +9,7 @@ import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
+import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MyBadgeService {
 
+    private final MemberRepository memberRepository;
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
     private final AuthService authService;
@@ -75,7 +77,7 @@ public class MyBadgeService {
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
 
-        // Todo : 이미 채널 연결되어있으면 에러처리!
+        // Todo : 이미 채널 연결되어있으면 에러처리 필요
 
         String badgeTag;
 
@@ -84,7 +86,8 @@ public class MyBadgeService {
                 case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
-                case DIAMOND -> "@veri-diamon-" + RandomStringGenerator();
+                case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
+                case DOCTOR -> "@veri-doctor-" + RandomStringGenerator();
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
