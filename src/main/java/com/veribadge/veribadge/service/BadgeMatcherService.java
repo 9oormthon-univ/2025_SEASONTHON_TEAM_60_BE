@@ -3,9 +3,11 @@ package com.veribadge.veribadge.service;
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.dto.BadgeVerifyResponseDto;
 import com.veribadge.veribadge.repository.BadgeRepository;
+import com.veribadge.veribadge.util.ChannelUrlNormalizer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -13,15 +15,22 @@ import java.util.Optional;
 public class BadgeMatcherService {
 
     private final BadgeRepository badgeMatchRepository;
+    private final ChannelUrlNormalizer channelUrlNormalizer;
 
     public BadgeVerifyResponseDto verifyBadgeTag(String tag, String channelUrl) {
-        String normalized = normalizeChannelUrl(channelUrl);
+        String normalized = channelUrlNormalizer.normalize(channelUrl);
 
         Optional<Badge> matchOpt = badgeMatchRepository.findByVerifiedTagAndChannelUrl(tag, normalized);
 
-        return matchOpt
-                .map(match -> new BadgeVerifyResponseDto(match.getBadgeLevel(), true)) // enum으로 바로 사용
-                .orElseGet(() -> new BadgeVerifyResponseDto(null, false));            // 없으면 null로 응답
+        return matchOpt.map(match -> BadgeVerifyResponseDto.builder()
+                .badgeLevel(match.getBadgeLevel())
+                .valid(true)
+                .verifiedDate(match.getVerifiedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .build()
+        ).orElseGet(() -> BadgeVerifyResponseDto.builder()
+                .valid(false)
+                .build()
+        );
     }
 
     // 전달된 URL을 항상 "www.youtube.com/@핸들" 포맷으로 정규화

@@ -61,9 +61,8 @@ public class MyBadgeService {
                 ));
     }
 
-    @Transactional
     public void connectChannel(String channelUrl, String email, Long userId){
-        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member)
@@ -74,7 +73,7 @@ public class MyBadgeService {
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
 
-        // Todo : 이미 채널 연결되어있으면 에러처리!
+        // Todo : 이미 채널 연결되어있으면 에러처리 필요
 
         String badgeTag;
 
@@ -83,14 +82,14 @@ public class MyBadgeService {
                 case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
-                case DIAMOND -> "@veri-diamon-" + RandomStringGenerator();
+                case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
+                case DOCTOR -> "@veri-doctor-" + RandomStringGenerator();
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        // String email = "임시 하드코딩"; // FIXME !!
         badge.connect(channelUrl, badgeTag, email);
-
         badgeRepository.save(badge);
+
     }
 
     public String RandomStringGenerator() {
