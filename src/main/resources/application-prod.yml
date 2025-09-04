@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: ${DB_DRIVER_CLASS_NAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   security:
     oauth2:
