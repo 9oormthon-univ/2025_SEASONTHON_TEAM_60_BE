@@ -31,9 +31,9 @@ public class MemberInitializer implements CommandLineRunner {
         String testEmail1 = "test1@example.com";
         if (memberRepository.findByEmail(testEmail1).isEmpty()) {
             Member member1 = new Member(
+                    1L,
                     testEmail1,
                     "김지원",
-                    "password-1111",
                     Role.USER,
                     LocalDateTime.now()
             ); membersToSave.add(member1);
@@ -45,9 +45,9 @@ public class MemberInitializer implements CommandLineRunner {
         String testEmail2 = "test2@example.com";
         if (memberRepository.findByEmail(testEmail2).isEmpty()) {
             Member member2 = new Member(
+                    2L,
                     testEmail2,
                     "이수한",
-                    "password-2222",
                     Role.USER,
                     LocalDateTime.now()
             ); membersToSave.add(member2);
@@ -59,9 +59,9 @@ public class MemberInitializer implements CommandLineRunner {
         String testEmail3 = "test3@example.com";
         if (memberRepository.findByEmail(testEmail3).isEmpty()) {
             Member member3 = new Member(
+                    3L,
                     testEmail3,
                     "박지수",
-                    "password-3333",
                     Role.USER,
                     LocalDateTime.now()
             ); membersToSave.add(member3);

@@ -11,6 +11,7 @@ import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,8 +61,8 @@ public class MyBadgeService {
                 ));
     }
 
-    public String connectChannel(String channelUrl, Long userId){
-        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
+    public void connectChannel(String channelUrl, String email, Long userId){
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member)
@@ -72,6 +73,8 @@ public class MyBadgeService {
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
 
+        // Todo : 이미 채널 연결되어있으면 에러처리 필요
+
         String badgeTag;
 
         do {
@@ -79,14 +82,14 @@ public class MyBadgeService {
                 case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
-                case DIAMOND -> "@veri-diamon-" + RandomStringGenerator();
+                case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
+                case DOCTOR -> "@veri-doctor-" + RandomStringGenerator();
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        badge.connect(channelUrl, badgeTag);
-
+        badge.connect(channelUrl, badgeTag, email);
         badgeRepository.save(badge);
-        return badgeTag;
+
     }
 
     public String RandomStringGenerator() {
