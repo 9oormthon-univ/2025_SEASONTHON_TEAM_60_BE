@@ -30,8 +30,8 @@ public class MyBadgeService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Optional<Verification> verification = verificationRepository.findByUserId(member);
-
-        if (verification.isEmpty()) { // 로그인만 되어있는 사용자 (제출X, 인증X)
+        if (verification.isEmpty()) {
+            // 로그인만 되어있는 사용자 (제출X, 인증X)
             return new MyBadgeResponseDto(
                     member.getUsername(),
                     member.getEmail(),
@@ -73,26 +73,25 @@ public class MyBadgeService {
         BadgeLevel badgeLevel = badge.getBadgeLevel();
 
         String badgeTag;
-
         do {
             badgeTag = switch (badgeLevel) {
                 case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
-                case DIAMOND -> "@veri-diamon-" + RandomStringGenerator();
+                case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
+                case DOCTOR -> "@veri-doctor-" + RandomStringGenerator();
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
         badge.connect(channelUrl, badgeTag);
-
         badgeRepository.save(badge);
+
         return badgeTag;
     }
 
     public String RandomStringGenerator() {
         int length = 6;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
@@ -100,6 +99,7 @@ public class MyBadgeService {
             int index = random.nextInt(characters.length());
             sb.append(characters.charAt(index));
         }
+
         return sb.toString();
     }
 }

@@ -11,6 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 // 개발 중엔 패턴으로 허용 (확장프로그램 ID 변화/서브패스 대응)
                 .allowedOriginPatterns(
+                        "https://*.youtube.com",
                         "https://www.youtube.com",
                         "http://localhost:*",
                         "http://127.0.0.1:*",

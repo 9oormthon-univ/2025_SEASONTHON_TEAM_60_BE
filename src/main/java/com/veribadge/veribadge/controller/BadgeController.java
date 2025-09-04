@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 유튜브 댓글을 분석하고 해당 유저에게 뱃지를 매칭하는 API 컨트롤러
  */
-@CrossOrigin(origins = "https://www.youtube.com")
 @RestController
 @RequestMapping("/api/badge")
 @RequiredArgsConstructor
