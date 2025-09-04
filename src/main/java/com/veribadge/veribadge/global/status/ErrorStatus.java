@@ -20,8 +20,8 @@ public enum ErrorStatus {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER 404", "사용자를 찾을 수 없습니다."),
 
     // Auth (카카오 로그인 관련 에러 추가)
-    KAKAO_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH5001", "카카오 API 연동 중 오류가 발생했습니다."),
-    JSON_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH5002", "JSON 파싱 중 오류가 발생했습니다."),
+    KAKAO_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH 500", "카카오 API 연동 중 오류가 발생했습니다."),
+    JSON_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH 500", "JSON 파싱 중 오류가 발생했습니다."),
 
     // Verification
     VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "인증을 찾을 수 없습니다."),

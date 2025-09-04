@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:*",
                         "http://127.0.0.1:*",
                         "chrome-extension://*",
-                        "https://veribadge.vercel.app"  // ✅ Vercel 배포 주소 추가!
+                        "https://veribadge.vercel.app"  // Vercel 배포 주소 추가!
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

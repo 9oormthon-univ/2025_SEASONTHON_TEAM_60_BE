@@ -30,8 +30,8 @@ public class MyBadgeService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Optional<Verification> verification = verificationRepository.findByUserId(member);
-        if (verification.isEmpty()) {
-            // 로그인만 되어있는 사용자 (제출X, 인증X)
+
+        if (verification.isEmpty()) { // 로그인만 되어있는 사용자 (제출X, 인증X)
             return new MyBadgeResponseDto(
                     member.getUsername(),
                     member.getEmail(),
@@ -60,8 +60,8 @@ public class MyBadgeService {
                 ));
     }
 
-    public String connectChannel(String channelUrl, Long userId){
-        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
+    public void connectChannel(String channelUrl, String email, Long userId){
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member)
@@ -71,6 +71,8 @@ public class MyBadgeService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
+
+        // Todo : 이미 채널 연결되어있으면 에러처리 필요
 
         String badgeTag;
         do {
@@ -83,15 +85,15 @@ public class MyBadgeService {
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        badge.connect(channelUrl, badgeTag);
+        badge.connect(channelUrl, badgeTag, email);
         badgeRepository.save(badge);
 
-        return badgeTag;
     }
 
     public String RandomStringGenerator() {
         int length = 6;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
@@ -99,7 +101,6 @@ public class MyBadgeService {
             int index = random.nextInt(characters.length());
             sb.append(characters.charAt(index));
         }
-
         return sb.toString();
     }
 }
