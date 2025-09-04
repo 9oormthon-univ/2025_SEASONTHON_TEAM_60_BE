@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,8 +19,8 @@ public class MainController {
 
     @Operation(summary = "나의 뱃지 관리 조회")
     @GetMapping
-    public Response<DashboardResponseDto> getMyBadge(@RequestParam("userId") Long userId){
-        DashboardResponseDto dto = mainService.getMyBadge(userId);
+    public Response<DashboardResponseDto> getMyBadge(){
+        DashboardResponseDto dto = mainService.getMyBadge();
         return Response.success(SuccessStatus.MAIN_SUCCESS, dto);
     }
 }
