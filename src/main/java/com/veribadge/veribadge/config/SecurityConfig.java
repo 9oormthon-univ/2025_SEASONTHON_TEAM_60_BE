@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/",
-                                "/login"
+                                "/login",
+                                "/admin/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -43,8 +43,7 @@ public class VerificationInitializer implements CommandLineRunner {
             Verification verification2 = new Verification(
                     member2,
                     "certificate url 2",
-                    LocalDateTime.now(),
-                    VerificationStatus.SUBMITTED
+                    LocalDateTime.now()
             ); verificationsToSave.add(verification2);
         } else {
             log.info("{} 인증은 이미 존재합니다.", testEmail2);
@@ -58,8 +57,7 @@ public class VerificationInitializer implements CommandLineRunner {
             Verification verification3 = new Verification(
                     member3,
                     "certificate url 3",
-                    LocalDateTime.now(),
-                    VerificationStatus.SUBMITTED
+                    LocalDateTime.now()
             ); verificationsToSave.add(verification3);
         } else {
             log.info("{} 인증은 이미 존재합니다.", testEmail3);
