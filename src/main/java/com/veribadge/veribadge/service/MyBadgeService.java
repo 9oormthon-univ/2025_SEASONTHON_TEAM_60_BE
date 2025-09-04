@@ -75,6 +75,7 @@ public class MyBadgeService {
         // Todo : 이미 채널 연결되어있으면 에러처리 필요
 
         String badgeTag;
+
         do {
             badgeTag = switch (badgeLevel) {
                 case SILVER -> "@veri-silver-" + RandomStringGenerator();
