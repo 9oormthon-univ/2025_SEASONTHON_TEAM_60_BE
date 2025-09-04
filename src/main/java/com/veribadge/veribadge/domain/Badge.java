@@ -32,6 +32,8 @@ public class Badge {
     @Enumerated(EnumType.STRING)
     private BadgeLevel badgeLevel;
 
+    private String email; // google email
+
     public Badge(Verification verificationId, LocalDate verifiedDate, BadgeLevel badgeLevel,
                  String channelUrl, String verifiedTag){
         this.verificationId = verificationId;
@@ -47,8 +49,9 @@ public class Badge {
         this.badgeLevel = badgeLevel;
     }
 
-    public void connect(String channelUrl, String verifiedTag) {
+    public void connect(String channelUrl, String verifiedTag, String email) {
         this.channelUrl = channelUrl;
         this.verifiedTag = verifiedTag;
+        this.email = email;
     }
 }

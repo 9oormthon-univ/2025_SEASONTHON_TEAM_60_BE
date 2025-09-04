@@ -11,6 +11,7 @@ import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,8 @@ public class MyBadgeService {
                 ));
     }
 
-    public String connectChannel(String channelUrl, Long userId){
+    @Transactional
+    public void connectChannel(String channelUrl, String email, Long userId){
         Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
@@ -71,6 +73,8 @@ public class MyBadgeService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
+
+        // Todo : 이미 채널 연결되어있으면 에러처리!
 
         String badgeTag;
 
@@ -83,10 +87,10 @@ public class MyBadgeService {
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        badge.connect(channelUrl, badgeTag);
+        // String email = "임시 하드코딩"; // FIXME !!
+        badge.connect(channelUrl, badgeTag, email);
 
         badgeRepository.save(badge);
-        return badgeTag;
     }
 
     public String RandomStringGenerator() {
