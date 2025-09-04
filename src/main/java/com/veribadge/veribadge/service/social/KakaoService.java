@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.service;
+package com.veribadge.veribadge.service.social;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

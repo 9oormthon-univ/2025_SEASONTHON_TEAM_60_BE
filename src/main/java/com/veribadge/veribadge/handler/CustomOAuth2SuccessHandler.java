@@ -1,6 +1,7 @@
-package com.veribadge.veribadge.google;
+package com.veribadge.veribadge.handler;
 
 import com.veribadge.veribadge.jwt.JwtProvider;
+import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.MyBadgeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -52,8 +53,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // 아래는 'verificationId'를 어떻게든 가져왔다고 가정한 예시입니다.
         // Long verificationId = getVerificationIdFromSomewhere(email);
         // badgeService.updateBadgeWithGoogleInfo(verificationId, channelUrl, email);
-        Long userId = 3L; // TODO : getCurrentUser로 추후 변경
-        myBadgeService.connectChannel(channelUrl, email, userId);
+        myBadgeService.connectChannel(channelUrl, email);
 
 
         // 4. JWT 발급

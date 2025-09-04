@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.google;
+package com.veribadge.veribadge.service.social;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
