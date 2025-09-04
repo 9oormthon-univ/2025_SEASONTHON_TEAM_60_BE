@@ -8,6 +8,8 @@ import com.veribadge.veribadge.repository.MemberRepository; // MemberRepository 
 import com.veribadge.veribadge.service.social.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,21 +26,18 @@ public class AuthService {
      * @return Member 현재 사용자 엔티티
      */
     public Member getCurrentUser() {
-        // 1. 헤더에서 Access Token 추출
-        String authorizationHeader = httpServletRequest.getHeader("Authorization");
+        // 1. SecurityContextHolder에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             throw new CustomException(ErrorStatus.INVALID_TOKEN);
         }
-        String accessToken = authorizationHeader.substring(7);
 
-        // 2. Access Token으로 카카오에서 사용자 정보 조회
-        KakaoUserInfoDto kakaoUserInfo = kakaoService.getUserInfo(accessToken);
-        Long kakaoId = kakaoUserInfo.getId();
+        // 2. JWT의 subject(email)을 꺼내기
+        Long userId = Long.valueOf(authentication.getName());
 
-        // 3. 카카오 ID로 우리 DB에서 회원 조회
-        //    orElseThrow()를 사용하여 해당 회원이 없으면 예외를 발생시킵니다.
-        return memberRepository.findByKakaoId(kakaoId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND)); // 적절한 예외를 정의하여 사용
+        // 3. 우리 DB에서 Member 조회
+        return memberRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 }

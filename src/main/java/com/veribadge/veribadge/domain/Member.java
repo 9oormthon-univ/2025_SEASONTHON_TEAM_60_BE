@@ -38,9 +38,9 @@ public class Member {
 
     @Builder
     public Member(Long kakaoId, String username) {
-        this.kakaoId = kakaoId;
-        this.username = username;
-        this.role = Role.USER;
-        this.createdAt = LocalDateTime.now();
+
+    }
+
+    public void updateEmail(String testEmail1) {
     }
 }
