@@ -17,7 +17,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+//@Service
 @Slf4j
 public class KakaoService {
 
