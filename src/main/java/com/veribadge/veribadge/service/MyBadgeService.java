@@ -61,10 +61,10 @@ public class MyBadgeService {
     }
 
     @Transactional
-    public void connectChannel(String channelUrl, String email){
-        Member member = authService.getCurrentUser();
-//        Member member = memberRepository.findByUserId(3L)
-//                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+    public void connectChannel(String channelUrl, String email, String description){
+        // Member member = authService.getCurrentUser();
+        Member member = memberRepository.findByUserId(3L)
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
@@ -88,7 +88,7 @@ public class MyBadgeService {
             };
         } while (badgeRepository.existsByVerifiedTag(badgeTag));
 
-        badge.connect(channelUrl, badgeTag, email);
+        badge.connect(channelUrl, badgeTag, email, description);
 
         badgeRepository.save(badge);
     }

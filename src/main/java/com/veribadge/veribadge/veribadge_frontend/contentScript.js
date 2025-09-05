@@ -46,29 +46,35 @@ console.log("[VeriBadge] content script loaded");
 })();
 
 /* -------------------- 2) 유틸 -------------------- */
-function getBadgeImageUrlByTier(tier) {
+function getBadgeLabel(tier) {
     switch (tier?.toLowerCase()) {
-        case "silver":   return chrome.runtime.getURL("images/silver.png");
-        case "gold":     return chrome.runtime.getURL("images/gold.png");
-        case "platinum": return chrome.runtime.getURL("images/platinum.png");
-        case "diamond":  return chrome.runtime.getURL("images/diamond.png");
-        case "doctor":   return chrome.runtime.getURL("images/doctor.png");
-        default:         return chrome.runtime.getURL("images/default.png");
+        case "top1": return "상위 1%";
+        case "top10": return "상위 10%";
+        case "top20": return "상위 20%";
+        case "doctor": return "의사 인증";
+        default: return tier ?? "등급 미확인";
     }
 }
 
-function createPortalTooltip({ badgeImageUrl, tier, verifiedDate }) {
-    const ko = { silver:"실버", gold:"골드", platinum:"플래티넘", diamond:"다이아몬드", doctor:"의사" };
+function createPortalTooltip({ badgeImageUrl, tier, verifiedDate, description }) {
+    const label = getBadgeLabel(tier);
+    const finalDescription = description || "";
+
     const tip = document.createElement("div");
     tip.className = "veribadge-portal-tooltip";
     tip.innerHTML = `
     <div style="margin-bottom:4px;">
       ${badgeImageUrl ? `<img src="${badgeImageUrl}" class="veribadge-badge-icon" alt="badge" />` : ""}
-      인증 정보
+      인증정보
     </div>
-    <div>자격: ${ko[tier?.toLowerCase()] ?? tier}</div>
+    <div>자격: ${label}</div>
+    ${finalDescription ? `<div>${finalDescription}</div>` : ""}
     ${verifiedDate ? `<div>인증일: ${verifiedDate}</div>` : ""}
-    <div>확인: veribadge.com</div>
+    <div>
+      <a href="https://two025-seasonthon-team-60-be.onrender.com" target="_blank" style="color:#00bfff;text-decoration:underline;">
+        확인: veribadge.com
+      </a>
+    </div>
   `;
     document.body.appendChild(tip);
     return tip;
