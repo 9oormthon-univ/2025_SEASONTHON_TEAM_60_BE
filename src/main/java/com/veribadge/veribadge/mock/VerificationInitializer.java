@@ -67,5 +67,9 @@ public class VerificationInitializer implements CommandLineRunner {
         } else {
             log.info("모든 테스트 인증이 이미 존재합니다.");
         }
+
+
     }
+
+
 }

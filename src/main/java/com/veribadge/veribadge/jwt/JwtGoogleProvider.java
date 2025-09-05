@@ -2,16 +2,25 @@ package com.veribadge.veribadge.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtGoogleProvider {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 랜덤 키 (실제 운영에서는 고정된 시크릿 키 사용)
+    private final SecretKey key;
+
+    // 생성자를 통해 application-dev.yml의 jwt.secret 값을 주입받아 '마스터 키'를 생성합니다.
+    public JwtGoogleProvider(@Value("${jwt.secret}") String secretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateToken(String email) {
         long now = System.currentTimeMillis();
@@ -21,7 +30,7 @@ public class JwtGoogleProvider {
                 .setSubject(email)
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + validity))
-                .signWith(key)
+                .signWith(key) // 이제 고정된 마스터 키로 서명합니다.
                 .compact();
     }
 
