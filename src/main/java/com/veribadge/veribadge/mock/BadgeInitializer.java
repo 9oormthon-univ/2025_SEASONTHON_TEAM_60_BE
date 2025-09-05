@@ -51,7 +51,7 @@ public class BadgeInitializer implements CommandLineRunner {
             Badge badge3 = new Badge(
                     verification3,
                     LocalDate.now(),
-                    BadgeLevel.SILVER,
+                    BadgeLevel.,
                     "Channel url 3",
                     "@veri-silver-dhlske"
             ); badgesToSave.add(badge3);
