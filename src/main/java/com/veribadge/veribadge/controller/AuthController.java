@@ -8,7 +8,8 @@ import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.exception.Response;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.global.status.SuccessStatus;
-import com.veribadge.veribadge.jwt.JwtProvider;
+import com.veribadge.veribadge.jwt.JwtGoogleProvider;
+import com.veribadge.veribadge.jwt.JwtKakaoProvider;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.social.KakaoService;
@@ -38,11 +39,11 @@ import java.util.Map;
 @Tag(name = "소셜 API 관리", description = "카카오, 구글 정보를 받아옵니다.")
 @Slf4j
 public class AuthController {
+    private final JwtKakaoProvider jwtKakaoProvider;
     private final KakaoService kakaoService;
     private final MemberRepository memberRepository;
     private final GoogleService googleService;
     private final OAuth2AuthorizedClientService authorizedClientService;
-    private final JwtProvider jwtProvider;
 
     @GetMapping("/kakao/callback")
     public Response<LoginResponseDto> kakaoCallback(@RequestParam String code) {
@@ -60,7 +61,7 @@ public class AuthController {
                         .role(Role.USER)
                         .build()));
 
-        String jwt = jwtProvider.generateToken(member.getUserId());
+        String jwt = jwtKakaoProvider.generateToken(member.getUserId());
         forceLogin(member);
 
         LoginResponseDto responseDto = new LoginResponseDto(member,jwt);
