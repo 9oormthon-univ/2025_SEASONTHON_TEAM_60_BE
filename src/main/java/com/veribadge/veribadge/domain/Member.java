@@ -2,9 +2,7 @@ package com.veribadge.veribadge.domain;
 
 import com.veribadge.veribadge.domain.enums.Role;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +31,11 @@ public class Member {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+
+    @Builder
     private Member(Long kakaoId, String username, Role role) {
         this.kakaoId = kakaoId;
         this.username = username;
         this.role = role;
-    }
-
-    public static Member createUser(Long kakaoId, String username) {
-        return new Member(kakaoId, username, Role.USER);
-    }
-
-    public static Member createAdmin(Long kakaoId, String username) {
-        return new Member(kakaoId, username, Role.ADMIN);
     }
 }

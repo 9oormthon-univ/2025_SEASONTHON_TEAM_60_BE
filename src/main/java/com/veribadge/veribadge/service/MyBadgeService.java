@@ -9,6 +9,7 @@ import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
+import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class MyBadgeService {
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
     private final AuthService authService;
+    private final MemberRepository memberRepository;
 
     public MyBadgeResponseDto getMyBadge(){
         Member member = authService.getCurrentUser();
@@ -35,7 +37,6 @@ public class MyBadgeService {
         if (verification.isEmpty()) { // 로그인만 되어있는 사용자 (제출X, 인증X)
             return new MyBadgeResponseDto(
                     member.getUsername(),
-                    member.getEmail(),
                     VerificationStatus.NOT_SUBMITTED
             );
         }
@@ -46,7 +47,6 @@ public class MyBadgeService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증O) -> 채널 연결 O / X
                 new MyBadgeResponseDto(
                         member.getUsername(),
-                        member.getEmail(),
                         verification.get().getStatus(),
                         value.getBadgeLevel(),
                         value.getVerifiedDate(),
@@ -56,16 +56,15 @@ public class MyBadgeService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증 아직 or 거절)
                 new MyBadgeResponseDto(
                         member.getUsername(),
-                        member.getEmail(),
                         verification.get().getStatus()
                 ));
     }
 
     @Transactional
     public void connectChannel(String channelUrl, String email){
-        Member member = authService.getCurrentUser();
-//        Member member = memberRepository.findByUserId(userId)
-//                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+        // Member member = authService.getCurrentUser();
+        Member member = memberRepository.findByUserId(3L)
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));

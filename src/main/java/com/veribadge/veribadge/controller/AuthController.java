@@ -1,6 +1,7 @@
 package com.veribadge.veribadge.controller;
 
 import com.veribadge.veribadge.domain.Member;
+import com.veribadge.veribadge.domain.enums.Role;
 import com.veribadge.veribadge.dto.KakaoUserInfoDto;
 import com.veribadge.veribadge.dto.LoginResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
@@ -56,6 +57,7 @@ public class AuthController {
                 .orElseGet(() -> memberRepository.save(Member.builder()
                         .kakaoId(kakaoId)
                         .username(userInfo.getKakaoAccount().getName())
+                        .role(Role.USER)
                         .build()));
 
         String jwt = jwtProvider.generateToken(member.getUserId());

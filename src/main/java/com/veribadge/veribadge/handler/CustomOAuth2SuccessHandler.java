@@ -51,13 +51,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         String channelUrl = (String) userInfo.get("channelLink");
 
         // 3. DB에 Badge 정보 업데이트 (핵심 로직 추가)
-        // !! 중요 !!
-        // 여기서 '누구'의 배지를 업데이트할지 결정해야 합니다.
-        // 예를 들어, 구글 이메일(email)을 통해 우리 시스템의 사용자(Verification)를 찾고
-        // 그 사용자의 badge를 업데이트 해야 합니다.
-        // 아래는 'verificationId'를 어떻게든 가져왔다고 가정한 예시입니다.
-        // Long verificationId = getVerificationIdFromSomewhere(email);
-        // badgeService.updateBadgeWithGoogleInfo(verificationId, channelUrl, email);
         myBadgeService.connectChannel(channelUrl, email);
 
 

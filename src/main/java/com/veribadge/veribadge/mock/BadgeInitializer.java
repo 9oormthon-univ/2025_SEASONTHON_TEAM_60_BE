@@ -41,7 +41,7 @@ public class BadgeInitializer implements CommandLineRunner {
 
         // 3. get verifiedTag
         String testEmail3 = "test3@example.com";
-        Member member3 = memberRepository.findByEmail(testEmail3)
+        Member member3 = memberRepository.findByUserId(3L)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification3 = verificationRepository.findByUserId(member3)

@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DashboardResponseDto {
     private String username;
-    private String email;
     private Role role;
     private VerificationStatus status;
 
@@ -23,9 +22,8 @@ public class DashboardResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate badgeDate;
 
-    public DashboardResponseDto(String username, String email, Role role, VerificationStatus status){
+    public DashboardResponseDto(String username, Role role, VerificationStatus status){
         this.username = username;
-        this.email = email;
         this.role = role;
         this.status = status;
     }

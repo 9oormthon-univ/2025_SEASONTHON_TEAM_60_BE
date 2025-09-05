@@ -36,7 +36,7 @@ public class VerificationInitializer implements CommandLineRunner {
 
         // 2. submit certificate
         String testEmail2 = "test2@example.com";
-        Member member2 = memberRepository.findByEmail(testEmail2)
+        Member member2 = memberRepository.findByUserId(2L)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         if (verificationRepository.findByUserId(member2).isEmpty()) {
@@ -51,7 +51,7 @@ public class VerificationInitializer implements CommandLineRunner {
 
         // 3. get verifiedTag
         String testEmail3 = "test3@example.com";
-        Member member3 = memberRepository.findByEmail(testEmail3)
+        Member member3 = memberRepository.findByUserId(3L)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
         if (verificationRepository.findByUserId(member3).isEmpty()) {
             Verification verification3 = new Verification(

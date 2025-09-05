@@ -1,6 +1,7 @@
 package com.veribadge.veribadge.mock;
 
 import com.veribadge.veribadge.domain.Member;
+import com.veribadge.veribadge.domain.enums.Role;
 import com.veribadge.veribadge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,11 @@ public class MemberInitializer implements CommandLineRunner {
         // 1. 테스트 사용자 1
         String testEmail1 = "test1@example.com";
         if (memberRepository.findByUserId(1L).isEmpty()) {
-            Member member1 = Member.createUser(1L, "김지원");
+            Member member1 = Member.builder()
+                    .kakaoId(1L)
+                    .username("김지원")
+                    .role(Role.USER)
+                    .build();
             membersToSave.add(member1);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail1);
@@ -37,7 +42,11 @@ public class MemberInitializer implements CommandLineRunner {
         // 2. 테스트 사용자 2
         String testEmail2 = "test2@example.com";
         if (memberRepository.findByUserId(2L).isEmpty()) {
-            Member member2 = Member.createUser(2L, "이수한");
+            Member member2 = Member.builder()
+                    .kakaoId(2L)
+                    .username("이수한")
+                    .role(Role.USER)
+                    .build();
             membersToSave.add(member2);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail2);
@@ -46,7 +55,11 @@ public class MemberInitializer implements CommandLineRunner {
         // 3. 테스트 사용자 3
         String testEmail3 = "test3@example.com";
         if (memberRepository.findByUserId(3L).isEmpty()) {
-            Member member3 = Member.createUser(3L, "박지수");
+            Member member3 = Member.builder()
+                    .kakaoId(3L)
+                    .username("박지수")
+                    .role(Role.USER)
+                    .build();
             membersToSave.add(member3);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail3);
