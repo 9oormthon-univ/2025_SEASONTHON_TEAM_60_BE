@@ -7,6 +7,7 @@ import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.exception.Response;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.global.status.SuccessStatus;
+import com.veribadge.veribadge.jwt.JwtProvider;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.social.KakaoService;
@@ -40,35 +41,32 @@ public class AuthController {
     private final MemberRepository memberRepository;
     private final GoogleService googleService;
     private final OAuth2AuthorizedClientService authorizedClientService;
+    private final JwtProvider jwtProvider;
 
     @GetMapping("/kakao/callback")
     public Response<LoginResponseDto> kakaoCallback(@RequestParam String code) {
 
         String tokenJsonResponse = kakaoService.getAccessToken(code);
         String accessToken = kakaoService.getAccessTokenOnly(tokenJsonResponse);
-
+        log.info(">>>>> ACCESS TOKEN: {} <<<<<", accessToken);
         KakaoUserInfoDto userInfo = kakaoService.getUserInfo(accessToken);
         Long kakaoId = userInfo.getId();
 
         Member member = memberRepository.findByKakaoId(kakaoId)
-                .orElseGet(() -> {
-                    // 신규 회원일 경우 자동 가입
-                    String username = userInfo.getKakaoAccount().getName();
-                    log.info("신규 회원입니다. 이름 '{}'(으)로 자동 가입합니다.", username);
-                    return memberRepository.save(Member.builder()
-                            .kakaoId(kakaoId)
-                            .username(username)
-                            .build());
-                });
+                .orElseGet(() -> memberRepository.save(Member.builder()
+                        .kakaoId(kakaoId)
+                        .username(userInfo.getKakaoAccount().getName())
+                        .build()));
 
+        String jwt = jwtProvider.generateToken(member.getUserId());
         forceLogin(member);
 
-        LoginResponseDto responseDto = new LoginResponseDto(member);
+        LoginResponseDto responseDto = new LoginResponseDto(member,jwt);
         return Response.success(SuccessStatus.LOGIN_SUCCESS, responseDto);
     }
 
     private void forceLogin(Member member) {
-        UserDetails userDetails = new User(member.getKakaoId().toString(), "", Collections.emptyList());
+        UserDetails userDetails = new User(member.getUserId().toString(), "", Collections.emptyList());
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

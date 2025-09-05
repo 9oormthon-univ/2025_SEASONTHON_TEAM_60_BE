@@ -13,12 +13,12 @@ public class JwtProvider {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 랜덤 키 (실제 운영에서는 고정된 시크릿 키 사용)
 
-    public String generateToken(String email) {
+    public String generateToken(Long userId) {
         long now = System.currentTimeMillis();
         long validity = 1000L * 60 * 60; // 1시간
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + validity))
                 .signWith(key)
@@ -34,10 +34,11 @@ public class JwtProvider {
         }
     }
 
-    public String getEmail(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
+    public Long getUserId(String token) {
+        String subject = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+        return Long.valueOf(subject);
     }
 }

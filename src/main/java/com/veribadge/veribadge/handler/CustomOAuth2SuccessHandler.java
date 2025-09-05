@@ -1,6 +1,10 @@
 package com.veribadge.veribadge.handler;
 
+import com.veribadge.veribadge.domain.Member;
+import com.veribadge.veribadge.exception.CustomException;
+import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.jwt.JwtProvider;
+import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.MyBadgeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +29,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     private final GoogleService googleService;
     private final MyBadgeService myBadgeService;
     private final OAuth2AuthorizedClientService authorizedClientService;
+    private final MemberRepository memberRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -57,7 +62,12 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
 
         // 4. JWT 발급
-        String jwt = jwtProvider.generateToken(email);
+        Long userId = Long.valueOf(authentication.getName());
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+
+
+        String jwt = jwtProvider.generateToken(member.getUserId());
 
         // 5. 프론트로 JWT 내려주기
         String targetUrl = UriComponentsBuilder.fromUriString("https://veribadge.vercel.app/my-badges")
