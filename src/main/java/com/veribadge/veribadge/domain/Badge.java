@@ -54,12 +54,10 @@ public class Badge {
         this.badgeLevel = badgeLevel;
     }
 
-    public void connect(String channelUrl, String verifiedTag, String email, String description) {
+    public void connect(String channelUrl, String verifiedTag, String email) {
         this.channelUrl = channelUrl;
         this.verifiedTag = verifiedTag;
         this.email = email;
-        if (this.description == null || this.description.isBlank()) {
-            this.description = description;
-        }
+
     }
 }

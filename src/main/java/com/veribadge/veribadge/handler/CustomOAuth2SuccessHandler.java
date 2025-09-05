@@ -60,7 +60,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             String email = (String) userInfo.get("email");
             String channelUrl = (String) userInfo.get("channelLink");
 
-            myBadgeService.connectChannel(channelUrl, email, null);
+            myBadgeService.connectChannel(channelUrl, email);
 
             jwt = jwtGoogleProvider.generateToken(email);
 

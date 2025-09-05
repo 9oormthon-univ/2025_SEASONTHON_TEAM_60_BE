@@ -51,8 +51,6 @@ public class AdminService {
 
         verificationRepository.save(verification);
 
-        System.out.println("[DEBUG] Verification description: " + verification.getDescription());
-
         Badge badge = new Badge(verification, LocalDate.now(), badgeLevel);
         badgeRepository.save(badge);
     }
