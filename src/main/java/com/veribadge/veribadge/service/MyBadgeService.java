@@ -80,7 +80,6 @@ public class MyBadgeService {
 
         do {
             badgeTag = switch (badgeLevel) {
-                case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
                 case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();

@@ -1,5 +1,5 @@
-// injectBadge.js
-// 댓글 텍스트 엘리먼트 안의 '@veri-...'를 배지로 교체하고, hover 툴팁(포털)을 연결
+// injectBadge.js: 댓글 DOM에 badge 이미지와 hover 툴팁을 삽입하는 UI 모듈 (재사용 가능한 단일 기능)
+// contentScript.js: YouTube 댓글창에 대해 injectBadge.js를 호출하여 전체 흐름 제어 + 백엔드 연동 포함 (실제 실행 담당)
 
 export function injectBadgeIntoComment({
                                            commentTextElem,   // 필수: 댓글 텍스트 DOM (예: #content-text)
@@ -52,10 +52,16 @@ export function injectBadgeIntoComment({
 
     // 툴팁 연결
     for (const img of icons) {
+        console.log("[injectBadge] tooltipData 전달 확인:", {
+            tier: tooltipData?.tier,
+            verifiedDate: tooltipData?.verifiedDate,
+            description: tooltipData?.description,
+        });
         attachPortalTooltip(img, {
             badgeImageUrl,
             tier: tooltipData?.tier,
-            verifiedDate: tooltipData?.verifiedDate
+            verifiedDate: tooltipData?.verifiedDate,
+            description: tooltipData?.description
         });
     }
 }
@@ -99,51 +105,71 @@ function ensureVeriBadgeStyle() {
     document.head.appendChild(style);
 }
 
-/* ---------- 내부 유틸: 포털 툴팁 ---------- */
-function attachPortalTooltip(anchorEl, { badgeImageUrl, tier, verifiedDate }) {
-    let tip = null, hideTimer = null;
+function getBadgeLabel(tier) {
+    switch (tier?.toUpperCase()) {
+        case "GOLD": return "상위 20%";
+        case "PLATINUM": return "상위 10%";
+        case "DIAMOND": return "상위 1%";
+        case "DOCTOR": return "의사 인증";
+        default: return tier ?? "등급 미확인";
+    }
+}
 
-    const makeTip = () => {
-        const ko = { silver:"실버", gold:"골드", platinum:"플래티넘", diamond:"다이아몬드", doctor:"의사" };
-        const el = document.createElement("div");
-        el.className = "veribadge-portal-tooltip";
-        el.innerHTML = `
-      <div style="margin-bottom:4px;">
-        ${badgeImageUrl ? `<img src="${badgeImageUrl}" class="veribadge-badge-icon" alt="badge" />` : ""}
-        인증 정보
-      </div>
-      ${tier ? `<div>자격: ${ko[tier?.toLowerCase()] ?? tier}</div>` : ""}
-      ${verifiedDate ? `<div>인증일: ${verifiedDate}</div>` : ""}
-      <div>확인: veribadge.com</div>`;
-        document.body.appendChild(el);
-        return el;
-    };
+function createPortalTooltip({ badgeImageUrl, tier, verifiedDate, description }) {
+    console.log("[createPortalTooltip] 받은 description:", description);
+    const tip = document.createElement("div");
+    tip.className = "veribadge-portal-tooltip";
+    tip.innerHTML = `
+    <div style="margin-bottom:4px;">
+      ${badgeImageUrl ? `<img src="${badgeImageUrl}" class="veribadge-badge-icon" alt="badge" />` : ""}
+      인증정보
+    </div>
+    <div>자격: ${getBadgeLabel(tier)}</div>
+    ${description ? `<div>${description}</div>` : ""}
+    ${verifiedDate ? `<div>인증일: ${verifiedDate}</div>` : ""}
+    <div>
+      <a href="https://two025-seasonthon-team-60-be.onrender.com" target="_blank" style="color:#00bfff;text-decoration:underline;">
+        확인: veribadge.com
+      </a>
+    </div>
+  `;
+    document.body.appendChild(tip);
+    return tip;
+}
 
-    const position = () => {
-        const rect = anchorEl.getBoundingClientRect();
-        let left = rect.left, top = rect.bottom + 8;
-        const iw = window.innerWidth, ih = window.innerHeight;
+function positionTooltip(tip, anchorEl) {
+    const rect = anchorEl.getBoundingClientRect();
+    let left = rect.left;
+    let top = rect.bottom + 8;
+    const iw = window.innerWidth;
+    const ih = window.innerHeight;
 
-        tip.style.visibility = "hidden";
-        tip.style.display = "block";
-        const tw = tip.offsetWidth, th = tip.offsetHeight;
+    tip.style.visibility = "hidden";
+    tip.style.display = "block";
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
 
-        if (left + tw > iw - 8) left = iw - tw - 8;
-        if (top + th > ih - 8)  top  = rect.top - th - 8;
+    if (left + tw > iw - 8) left = iw - tw - 8;
+    if (top + th > ih - 8) top = rect.top - th - 8;
 
-        tip.style.left = `${left}px`;
-        tip.style.top  = `${top}px`;
-        tip.style.visibility = "visible";
-    };
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+    tip.style.visibility = "visible";
+}
+
+function attachPortalTooltip(anchorEl, data) {
+    let tip = null;
+    let hideTimer = null;
 
     const show = () => {
-        if (!tip) tip = makeTip();
+        if (!tip) tip = createPortalTooltip(data);
         clearTimeout(hideTimer);
         tip.style.display = "block";
-        position();
-        tip.__update = position;
-        window.addEventListener("scroll", position, true);
-        window.addEventListener("resize", position, true);
+        positionTooltip(tip, anchorEl);
+        const update = () => tip && positionTooltip(tip, anchorEl);
+        tip.__update = update;
+        window.addEventListener("scroll", update, true);
+        window.addEventListener("resize", update, true);
     };
 
     const scheduleHide = () => {
@@ -161,10 +187,8 @@ function attachPortalTooltip(anchorEl, { badgeImageUrl, tier, verifiedDate }) {
     document.addEventListener("mousemove", (e) => {
         if (!tip || tip.style.display === "none") return;
         const overIcon = anchorEl.contains(e.target);
-        const overTip  = tip.contains(e.target);
+        const overTip = tip.contains(e.target);
         if (overIcon || overTip) clearTimeout(hideTimer);
         else scheduleHide();
     });
 }
-
-export { attachPortalTooltip }; // 필요 시 외부에서도 사용 가능

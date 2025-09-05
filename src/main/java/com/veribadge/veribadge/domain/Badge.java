@@ -38,15 +38,17 @@ public class Badge {
     private String email; // google email
 
     public Badge(Verification verificationId, LocalDate verifiedDate, BadgeLevel badgeLevel,
-                 String channelUrl, String verifiedTag){
+                 String channelUrl, String verifiedTag, String email, String description) {
         this.verificationId = verificationId;
         this.verifiedDate = verifiedDate;
         this.badgeLevel = badgeLevel;
         this.channelUrl = channelUrl;
         this.verifiedTag = verifiedTag;
+        this.email = email;
+        this.description = description;
     }
 
-    public Badge(Verification verificationId, LocalDate verifiedDate, BadgeLevel badgeLevel){
+    public Badge(Verification verificationId, LocalDate verifiedDate, BadgeLevel badgeLevel) {
         this.verificationId = verificationId;
         this.verifiedDate = verifiedDate;
         this.badgeLevel = badgeLevel;
@@ -56,6 +58,8 @@ public class Badge {
         this.channelUrl = channelUrl;
         this.verifiedTag = verifiedTag;
         this.email = email;
-        this.description = description;
+        if (this.description == null || this.description.isBlank()) {
+            this.description = description;
+        }
     }
 }
