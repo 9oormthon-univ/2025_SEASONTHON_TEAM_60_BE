@@ -41,7 +41,6 @@ public class AdminService {
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
 
         description = switch (badgeLevel) {
-            case SILVER -> "사용 X";
             case GOLD -> "상위 20% | 개인 근로 소득 기준 1억 600만 원 이상입니다.";
             case PLATINUM -> "상위 10% | 개인 소득 기준 2억 1,000만 원 이상입니다.";
             case DIAMOND -> "상위 1% | 개인 근로 소득 기준 3억 3,000만 원 이상입니다.";

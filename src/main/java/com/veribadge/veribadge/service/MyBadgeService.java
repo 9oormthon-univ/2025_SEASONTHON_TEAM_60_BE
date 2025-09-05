@@ -58,13 +58,6 @@ public class MyBadgeService {
                 ));
     }
 
-
-    public void connectChannel(String channelUrl, String email) {
-        // 현재 로그인 사용자 기준으로 연결
-        Member member = authService.getCurrentUser();
-        connectChannelForMember(member, channelUrl, email);
-    }
-
     @Transactional
     public void connectChannel(String channelUrl, String email, Member member) {
         // 외부(예: OAuth SuccessHandler)에서 특정 member를 넘겨줄 때 사용
@@ -84,7 +77,6 @@ public class MyBadgeService {
         String badgeTag;
         do {
             badgeTag = switch (badgeLevel) {
-                case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
                 case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
