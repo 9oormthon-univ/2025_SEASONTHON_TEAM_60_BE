@@ -27,13 +27,8 @@ public class MemberInitializer implements CommandLineRunner {
 
         // 1. 테스트 사용자 1
         String testEmail1 = "test1@example.com";
-        // findByEmail 메소드가 MemberRepository에 정의되어 있어야 합니다.
-        if (memberRepository.findByEmail(testEmail1).isEmpty()) {
-            Member member1 = Member.builder() // new Member(...) 대신 최신 @Builder 방식 사용
-                    .kakaoId(1L)
-                    .username("김지원")
-                    .build();
-            member1.updateEmail(testEmail1); // 이메일은 updateEmail 메소드로 설정
+        if (memberRepository.findByUserId(1L).isEmpty()) {
+            Member member1 = Member.createUser(1L, "김지원");
             membersToSave.add(member1);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail1);
@@ -41,12 +36,8 @@ public class MemberInitializer implements CommandLineRunner {
 
         // 2. 테스트 사용자 2
         String testEmail2 = "test2@example.com";
-        if (memberRepository.findByEmail(testEmail2).isEmpty()) {
-            Member member2 = Member.builder()
-                    .kakaoId(2L)
-                    .username("이수한")
-                    .build();
-            member2.updateEmail(testEmail2);
+        if (memberRepository.findByUserId(2L).isEmpty()) {
+            Member member2 = Member.createUser(2L, "이수한");
             membersToSave.add(member2);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail2);
@@ -54,12 +45,8 @@ public class MemberInitializer implements CommandLineRunner {
 
         // 3. 테스트 사용자 3
         String testEmail3 = "test3@example.com";
-        if (memberRepository.findByEmail(testEmail3).isEmpty()) {
-            Member member3 = Member.builder()
-                    .kakaoId(3L)
-                    .username("박지수")
-                    .build();
-            member3.updateEmail(testEmail3);
+        if (memberRepository.findByUserId(3L).isEmpty()) {
+            Member member3 = Member.createUser(3L, "박지수");
             membersToSave.add(member3);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail3);
