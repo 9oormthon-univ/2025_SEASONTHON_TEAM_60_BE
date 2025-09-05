@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class MyBadgeResponseDto {
     private String username;
-    private String email;
     private VerificationStatus status;
 
     // 뱃지 발급받은 경우만
@@ -25,9 +24,8 @@ public class MyBadgeResponseDto {
     private String channelUrl;
     private String badgeTag;
 
-    public MyBadgeResponseDto(String username, String email, VerificationStatus status){
+    public MyBadgeResponseDto(String username, VerificationStatus status){
         this.username = username;
-        this.email = email;
         this.status = status;
     }
 }

@@ -1,25 +1,19 @@
 package com.veribadge.veribadge.service;
 
-import com.veribadge.veribadge.domain.Member; // Member 엔티티 import
-import com.veribadge.veribadge.dto.KakaoUserInfoDto;
+import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
-import com.veribadge.veribadge.repository.MemberRepository; // MemberRepository import
-import com.veribadge.veribadge.service.social.KakaoService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.veribadge.veribadge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final KakaoService kakaoService;
     private final MemberRepository memberRepository; // MemberRepository 주입
-    private final HttpServletRequest httpServletRequest;
 
     /**
      * 현재 로그인한 사용자의 Member 엔티티를 반환합니다.

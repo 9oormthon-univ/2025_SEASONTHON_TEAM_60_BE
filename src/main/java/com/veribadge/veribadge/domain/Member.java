@@ -2,10 +2,7 @@ package com.veribadge.veribadge.domain;
 
 import com.veribadge.veribadge.domain.enums.Role;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,17 +10,15 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(nullable = false, unique = true)
     private Long kakaoId; // FIXME : 나중에 socialId로 변경하고 socialType 객체 생성하기
-
-    @Column(unique = true, length = 50)
-    private String email;
 
     @Column(nullable = false)
     private String username;
@@ -36,11 +31,11 @@ public class Member {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+
     @Builder
-    public Member(Long kakaoId, String username) {
-
-    }
-
-    public void updateEmail(String testEmail1) {
+    private Member(Long kakaoId, String username, Role role) {
+        this.kakaoId = kakaoId;
+        this.username = username;
+        this.role = role;
     }
 }

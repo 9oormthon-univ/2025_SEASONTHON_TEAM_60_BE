@@ -9,9 +9,9 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtProvider {
+public class JwtKakaoProvider {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 랜덤 키 (실제 운영에서는 고정된 시크릿 키 사용)
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Todo : 고정키 사용
 
     public String generateToken(Long userId) {
         long now = System.currentTimeMillis();

@@ -30,7 +30,6 @@ public class MainService {
         if (verification.isEmpty()) { // 로그인만 되어있는 사용자 (제출X, 인증X)
             return new DashboardResponseDto(
                     member.getUsername(),
-                    member.getEmail(),
                     member.getRole(),
                     VerificationStatus.NOT_SUBMITTED
             );
@@ -42,7 +41,6 @@ public class MainService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증O)
                 new DashboardResponseDto(
                     member.getUsername(),
-                    member.getEmail(),
                     member.getRole(),
                     verification.get().getStatus(),
                     value.getBadgeLevel(),
@@ -51,7 +49,6 @@ public class MainService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증 아직 or 거절)
                 new DashboardResponseDto(
                     member.getUsername(),
-                    member.getEmail(),
                     member.getRole(),
                     verification.get().getStatus()
         ));

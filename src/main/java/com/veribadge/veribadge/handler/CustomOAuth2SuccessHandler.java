@@ -3,7 +3,8 @@ package com.veribadge.veribadge.handler;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
-import com.veribadge.veribadge.jwt.JwtProvider;
+import com.veribadge.veribadge.jwt.JwtGoogleProvider;
+import com.veribadge.veribadge.jwt.JwtKakaoProvider;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.MyBadgeService;
@@ -25,7 +26,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JwtProvider jwtProvider;
+    private final JwtGoogleProvider jwtGoogleProvider;
+    private final JwtKakaoProvider jwtKakaoProvider;
     private final GoogleService googleService;
     private final MyBadgeService myBadgeService;
     private final OAuth2AuthorizedClientService authorizedClientService;
@@ -37,40 +39,51 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                                         Authentication authentication) throws IOException {
 
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
-                oauthToken.getAuthorizedClientRegistrationId(),
-                oauthToken.getName()
-        );
 
-        // 1. 구글로부터 Access Token 가져오기
-        String accessToken = client.getAccessToken().getTokenValue();
+        // 1. provider 이름(registrationId) 가져오기
+        String registrationId = oauthToken.getAuthorizedClientRegistrationId();
 
-        // 2. GoogleService를 호출하여 이메일과 채널 정보 가져오기 (수정된 메소드 호출)
-        Map<String, Object> userInfo = googleService.getUserInfo(accessToken);
-        String email = (String) userInfo.get("email");
-        String channelUrl = (String) userInfo.get("channelLink");
+        String redirectUrl;
+        String jwt;
 
-        // 3. DB에 Badge 정보 업데이트 (핵심 로직 추가)
-        // !! 중요 !!
-        // 여기서 '누구'의 배지를 업데이트할지 결정해야 합니다.
-        // 예를 들어, 구글 이메일(email)을 통해 우리 시스템의 사용자(Verification)를 찾고
-        // 그 사용자의 badge를 업데이트 해야 합니다.
-        // 아래는 'verificationId'를 어떻게든 가져왔다고 가정한 예시입니다.
-        // Long verificationId = getVerificationIdFromSomewhere(email);
-        // badgeService.updateBadgeWithGoogleInfo(verificationId, channelUrl, email);
-        myBadgeService.connectChannel(channelUrl, email);
+        // 2. provider에 따라 분기 처리
+        if ("google".equals(registrationId)) {
+            // --- Google 로그인 로직 ---
+            OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                    oauthToken.getAuthorizedClientRegistrationId(),
+                    oauthToken.getName()
+            );
+
+            String accessToken = client.getAccessToken().getTokenValue();
+
+            Map<String, Object> userInfo = googleService.getUserInfo(accessToken);
+            String email = (String) userInfo.get("email");
+            String channelUrl = (String) userInfo.get("channelLink");
+
+            myBadgeService.connectChannel(channelUrl, email);
+
+            jwt = jwtGoogleProvider.generateToken(email);
+
+            redirectUrl = "https://veribadge.vercel.app/my-badges";
+
+        } else if ("kakao".equals(registrationId)) {
+            // --- Kakao 로그인 로직 ---
+
+            Long userId = Long.valueOf(authentication.getName());
+            Member member = memberRepository.findById(userId)
+                    .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
 
-        // 4. JWT 발급
-        Long userId = Long.valueOf(authentication.getName());
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+            jwt = jwtKakaoProvider.generateToken(member.getUserId());
 
+            redirectUrl = "https://veribadge.vercel.app/";
+        } else {
+            // 지원하지 않는 provider인 경우 예외 처리
+            throw new CustomException(ErrorStatus.OAUTH_PROVIDER_NOT_SUPPORTED);
+        }
 
-        String jwt = jwtProvider.generateToken(member.getUserId());
-
-        // 5. 프론트로 JWT 내려주기
-        String targetUrl = UriComponentsBuilder.fromUriString("https://veribadge.vercel.app/my-badges")
+        // 3. --- 공통 로직: JWT 발급 및 리다이렉트 ---
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectUrl)
                 .queryParam("token", jwt)
                 .build().toUriString();
 
