@@ -40,33 +40,11 @@ import java.util.Map;
 @Slf4j
 public class AuthController {
     private final JwtKakaoProvider jwtKakaoProvider;
-    private final KakaoService kakaoService;
+    //private final KakaoService kakaoService;
     private final MemberRepository memberRepository;
     private final GoogleService googleService;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
-    @GetMapping("/kakao/callback")
-    public Response<LoginResponseDto> kakaoCallback(@RequestParam String code) {
-
-        String tokenJsonResponse = kakaoService.getAccessToken(code);
-        String accessToken = kakaoService.getAccessTokenOnly(tokenJsonResponse);
-        log.info(">>>>> ACCESS TOKEN: {} <<<<<", accessToken);
-        KakaoUserInfoDto userInfo = kakaoService.getUserInfo(accessToken);
-        Long kakaoId = userInfo.getId();
-
-        Member member = memberRepository.findByKakaoId(kakaoId)
-                .orElseGet(() -> memberRepository.save(Member.builder()
-                        .kakaoId(kakaoId)
-                        .username(userInfo.getKakaoAccount().getName())
-                        .role(Role.USER)
-                        .build()));
-
-        String jwt = jwtKakaoProvider.generateToken(member.getUserId());
-        forceLogin(member);
-
-        LoginResponseDto responseDto = new LoginResponseDto(member,jwt);
-        return Response.success(SuccessStatus.LOGIN_SUCCESS, responseDto);
-    }
 
     private void forceLogin(Member member) {
         UserDetails userDetails = new User(member.getUserId().toString(), "", Collections.emptyList());

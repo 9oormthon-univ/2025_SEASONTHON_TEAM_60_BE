@@ -23,12 +23,12 @@ public class AuthService {
         // 1. SecurityContextHolder에서 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new CustomException(ErrorStatus.INVALID_TOKEN);
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+            throw new CustomException(ErrorStatus.UNAUTHORIZED);
         }
 
-        // 2. JWT의 subject(email)을 꺼내기
-        Long userId = Long.valueOf(authentication.getName());
+
+        Long userId = Long.parseLong(authentication.getName());
 
         // 3. 우리 DB에서 Member 조회
         return memberRepository.findById(userId)
