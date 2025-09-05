@@ -10,6 +10,8 @@ import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @Tag(name = "관리자 페이지", description = "관리자 API")
 @RequiredArgsConstructor
@@ -24,11 +26,13 @@ public class AdminController {
 //        return Response.success(SuccessStatus.SUCCESS, null);
 //    }
 
-    @Operation(summary = "인증서 수락")
+    @Operation(summary = "인증서 수락",
+               description = "인증서 파일이 소득 증명인 경우 설명칸을 비워두고, 의사 증명인 경우 진료과를 작성해주세요. ex) OO과")
     @PostMapping("/admit/{userId}")
     public Response<Object> admitVerification(@PathVariable("userId") Long userId,
-                                              @RequestParam("BadgeLevel") BadgeLevel badgeLevel){
-        adminService.admitVerification(userId, badgeLevel);
+                                              @RequestParam("badgeLevel") BadgeLevel badgeLevel,
+                                              @RequestParam("description") Optional<String> description){
+        adminService.admitVerification(userId, badgeLevel, description.orElse(null));
         return Response.success(SuccessStatus.SUCCESS, null); // TODO : 성공 http 수정
     }
 

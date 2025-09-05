@@ -26,7 +26,7 @@ public class AdminService {
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
 
-    public void admitVerification(Long userId, BadgeLevel badgeLevel){
+    public void admitVerification(Long userId, BadgeLevel badgeLevel, String description){
         // 관리자만 수정 가능하도록
 //        Member member = authService.getCurrentUser();
 //
@@ -40,7 +40,15 @@ public class AdminService {
         Verification verification = verificationRepository.findByUserId(customer)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
 
-        verification.admitVerification(customer);
+        description = switch (badgeLevel) { // TODO : 등급 구간 별 설명 작성 필요
+            case SILVER -> "등급 구간 설명 작성";
+            case GOLD -> "등급 구간 설명 작성";
+            case PLATINUM -> "등급 구간 설명 작성";
+            case DIAMOND -> "등급 구간 설명 작성";
+            case DOCTOR -> description + " 의사입니다.";
+        } ;
+
+        verification.admitVerification(customer, description);
 
         verificationRepository.save(verification);
 
