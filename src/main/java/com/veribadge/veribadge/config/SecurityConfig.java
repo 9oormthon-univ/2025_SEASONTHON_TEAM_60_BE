@@ -1,6 +1,6 @@
 package com.veribadge.veribadge.config;
 
-import com.veribadge.veribadge.google.CustomOAuth2SuccessHandler;
+import com.veribadge.veribadge.handler.CustomOAuth2SuccessHandler;
 import com.veribadge.veribadge.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +19,13 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
-                // .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",
@@ -32,14 +33,17 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/auth/kakao/callback",
+                                "/oauth2/authorization/**",
+                                "/auth/**",
+                                "/auth/google/get-user-info",
                                 "/api/badge/verify",
                                 "/favicon.ico",
                                 "/css/**",
                                 "/js/**",
-                                "/images/**",
                                 "/",
-                                "/login"
+                                "/images/**",
+                                "/login",
+                                "/admin/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

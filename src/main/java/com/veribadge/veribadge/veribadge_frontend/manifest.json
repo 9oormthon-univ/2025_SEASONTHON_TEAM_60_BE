@@ -26,10 +26,9 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "images/silver.png",
-        "images/gold.png",
-        "images/platinum.png",
         "images/diamond.png",
+        "images/platinum.png",
+        "images/gold.png",
         "images/doctor.png",
         "images/default.png"
       ],

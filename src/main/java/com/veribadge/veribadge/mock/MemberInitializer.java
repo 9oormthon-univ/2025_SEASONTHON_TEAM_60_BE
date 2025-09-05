@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,44 +26,41 @@ public class MemberInitializer implements CommandLineRunner {
 
         List<Member> membersToSave = new ArrayList<>();
 
-        // 1. just signed up
+        // 1. 테스트 사용자 1
         String testEmail1 = "test1@example.com";
-        if (memberRepository.findByEmail(testEmail1).isEmpty()) {
-            Member member1 = new Member(
-                    1L,
-                    testEmail1,
-                    "김지원",
-                    Role.USER,
-                    LocalDateTime.now()
-            ); membersToSave.add(member1);
+        if (memberRepository.findByUserId(1L).isEmpty()) {
+            Member member1 = Member.builder()
+                    .kakaoId(1L)
+                    .username("김지원")
+                    .role(Role.USER)
+                    .build();
+            membersToSave.add(member1);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail1);
         }
 
-        // 2. submit certificate
+        // 2. 테스트 사용자 2
         String testEmail2 = "test2@example.com";
-        if (memberRepository.findByEmail(testEmail2).isEmpty()) {
-            Member member2 = new Member(
-                    2L,
-                    testEmail2,
-                    "이수한",
-                    Role.USER,
-                    LocalDateTime.now()
-            ); membersToSave.add(member2);
+        if (memberRepository.findByUserId(2L).isEmpty()) {
+            Member member2 = Member.builder()
+                    .kakaoId(2L)
+                    .username("이수한")
+                    .role(Role.USER)
+                    .build();
+            membersToSave.add(member2);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail2);
         }
 
-        // 3. get verifiedTag
+        // 3. 테스트 사용자 3
         String testEmail3 = "test3@example.com";
-        if (memberRepository.findByEmail(testEmail3).isEmpty()) {
-            Member member3 = new Member(
-                    3L,
-                    testEmail3,
-                    "박지수",
-                    Role.USER,
-                    LocalDateTime.now()
-            ); membersToSave.add(member3);
+        if (memberRepository.findByUserId(3L).isEmpty()) {
+            Member member3 = Member.builder()
+                    .kakaoId(3L)
+                    .username("박지수")
+                    .role(Role.USER)
+                    .build();
+            membersToSave.add(member3);
         } else {
             log.info("{} 계정은 이미 존재합니다.", testEmail3);
         }

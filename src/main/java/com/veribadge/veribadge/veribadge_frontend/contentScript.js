@@ -1,3 +1,6 @@
+// injectBadge.js: 댓글 DOM에 badge 이미지와 hover 툴팁을 삽입하는 UI 모듈 (재사용 가능한 단일 기능)
+// contentScript.js: YouTube 댓글창에 대해 injectBadge.js를 호출하여 전체 흐름 제어 + 백엔드 연동 포함 (실제 실행 담당)
+
 console.log("[VeriBadge] content script loaded");
 
 /* -------------------- 1) CSS 주입: 한 번만 -------------------- */
@@ -46,29 +49,51 @@ console.log("[VeriBadge] content script loaded");
 })();
 
 /* -------------------- 2) 유틸 -------------------- */
-function getBadgeImageUrlByTier(tier) {
-    switch (tier?.toLowerCase()) {
-        case "silver":   return chrome.runtime.getURL("images/silver.png");
-        case "gold":     return chrome.runtime.getURL("images/gold.png");
-        case "platinum": return chrome.runtime.getURL("images/platinum.png");
-        case "diamond":  return chrome.runtime.getURL("images/diamond.png");
-        case "doctor":   return chrome.runtime.getURL("images/doctor.png");
-        default:         return chrome.runtime.getURL("images/default.png");
+function getBadgeLabel(tier) {
+    switch (tier?.toUpperCase()) {
+        case "GOLD": return "상위 20%";
+        case "PLATINUM": return "상위 10%";
+        case "DIAMOND": return "상위 1%";
+        case "DOCTOR": return "의사 인증";
+        default: return tier;
     }
 }
 
-function createPortalTooltip({ badgeImageUrl, tier, verifiedDate }) {
-    const ko = { silver:"실버", gold:"골드", platinum:"플래티넘", diamond:"다이아몬드", doctor:"의사" };
+function getBadgeImageUrlByTier(tier) {
+    switch (tier?.toUpperCase()) {
+        case "GOLD":
+            return chrome.runtime.getURL("images/gold.png");
+        case "PLATINUM":
+            return chrome.runtime.getURL("images/platinum.png");
+        case "DIAMOND":
+            return chrome.runtime.getURL("images/diamond.png");
+        case "DOCTOR":
+            return chrome.runtime.getURL("images/doctor.png");
+        default:
+            return null;
+    }
+}
+
+function createPortalTooltip({ badgeImageUrl, tier, verifiedDate, description }) {
+    const label = getBadgeLabel(tier);
+
+    const finalDescription = typeof description === 'string' ? description : "";
+
     const tip = document.createElement("div");
     tip.className = "veribadge-portal-tooltip";
     tip.innerHTML = `
-    <div style="margin-bottom:4px;">
-      ${badgeImageUrl ? `<img src="${badgeImageUrl}" class="veribadge-badge-icon" alt="badge" />` : ""}
-      인증 정보
+    <div style="margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+      ${badgeImageUrl ? `<img src="${badgeImageUrl}" class="veribadge-badge-icon" alt="badge" style="width: 20px; height: 20px;" />` : ""}
+      <strong>인증정보</strong>
     </div>
-    <div>자격: ${ko[tier?.toLowerCase()] ?? tier}</div>
-    ${verifiedDate ? `<div>인증일: ${verifiedDate}</div>` : ""}
-    <div>확인: veribadge.com</div>
+    <div><strong>자격:</strong> ${label}</div>
+    ${finalDescription ? `<div><strong>설명:</strong> <span style="white-space: normal;">${finalDescription}</span></div>` : ""}
+    ${verifiedDate ? `<div><strong>인증일:</strong> ${verifiedDate}</div>` : ""}
+    <div>
+      <a href="https://two025-seasonthon-team-60-be.onrender.com" target="_blank" style="color: #00bfff; text-decoration: underline;">
+        확인: veribadge.com
+      </a>
+    </div>
   `;
     document.body.appendChild(tip);
     return tip;
@@ -99,14 +124,17 @@ function positionTooltip(tip, anchorEl) {
     tip.style.visibility = "visible";
 }
 
-function attachPortalTooltip(anchorEl, { badgeImageUrl, tier, verifiedDate }) {
-    let tip = null, hideTimer = null;
+function attachPortalTooltip(anchorEl, { badgeImageUrl, tier, verifiedDate, description }) {
+    let tip = null;
+    let hideTimer = null;
 
     const show = () => {
-        if (!tip) tip = createPortalTooltip({ badgeImageUrl, tier, verifiedDate });
-        clearTimeout(hideTimer);
+        if (!tip) tip = createPortalTooltip({ badgeImageUrl, tier, verifiedDate, description });
+
+        clearTimeout(hideTimer); // 마우스 다시 올라오면 타이머 제거
         tip.style.display = "block";
         positionTooltip(tip, anchorEl);
+
         const update = () => tip && positionTooltip(tip, anchorEl);
         tip.__update = update;
         window.addEventListener("scroll", update, true);
@@ -119,24 +147,30 @@ function attachPortalTooltip(anchorEl, { badgeImageUrl, tier, verifiedDate }) {
             tip.style.display = "none";
             window.removeEventListener("scroll", tip.__update, true);
             window.removeEventListener("resize", tip.__update, true);
-        }, 120);
+        }, 5000); // 5초 유지 후 사라짐
     };
 
+    // 기본 마우스 이벤트 설정
     anchorEl.addEventListener("mouseenter", show);
     anchorEl.addEventListener("mouseleave", scheduleHide);
 
-    // 툴팁 위로 이동해도 유지
+    // 마우스가 툴팁 위에 있을 때도 유지
     document.addEventListener("mousemove", (e) => {
         if (!tip || tip.style.display === "none") return;
+
         const overIcon = anchorEl.contains(e.target);
-        const overTip  = tip.contains(e.target);
-        if (overIcon || overTip) clearTimeout(hideTimer);
-        else scheduleHide();
+        const overTip = tip.contains(e.target);
+
+        if (overIcon || overTip) {
+            clearTimeout(hideTimer); // 마우스가 다시 들어오면 타이머 취소
+        } else {
+            scheduleHide(); // 툴팁/아이콘에서 완전히 벗어나면 다시 3초 카운트 시작
+        }
     });
 }
 
 /* -------------------- 3) 태그 → 배지 치환 (텍스트 노드 단위) -------------------- */
-function replaceTagWithBadge(commentTextElem, tag, badgeImageUrl, verifiedDate, tier) {
+function replaceTagWithBadge(commentTextElem, tag, badgeImageUrl, verifiedDate, tier, badgeDescription) {
     const walker = document.createTreeWalker(
         commentTextElem,
         NodeFilter.SHOW_TEXT,
@@ -177,13 +211,18 @@ function replaceTagWithBadge(commentTextElem, tag, badgeImageUrl, verifiedDate, 
 
     // 툴팁 연결
     for (const img of insertedIcons) {
-        attachPortalTooltip(img, { badgeImageUrl, tier, verifiedDate });
+        attachPortalTooltip(img, {
+            badgeImageUrl,
+            tier,
+            verifiedDate,
+            description: badgeDescription
+        });
     }
 }
 
 /* -------------------- 4) 태그/채널 추출 + 백엔드 -------------------- */
 function extractVeriTagAndTier(text) {
-    const re = /@veri-(silver|gold|platinum|diamond|doctor)-[a-z0-9]{6}/i;
+    const re = /@veri-(gold|platinum|diamond|doctor)-[a-z0-9]{6}/i;
     const m = text.match(re);
     return m ? { tag: m[0], tier: m[1] } : null;
 }
@@ -217,7 +256,9 @@ async function verifyWithBackend({ tag, channelUrl }) {
             });
             if (!res.ok) continue;
             const json = await res.json();
+            console.log("[VeriBadge] 백엔드 응답:", json?.data);
             return json?.data || null;
+
         } catch (_) {}
     }
     return null;
@@ -252,6 +293,9 @@ async function handleCommentNode(node) {
     const verify = await verifyWithBackend({ tag, channelUrl });
     if (!verify || !verify.valid) return;
 
+    console.log("[검증 응답] verify.description 타입:", typeof verify.description);
+    console.log("[검증 응답] verify.description 값:", verify.description);
+
     const badgeImageUrl = getBadgeImageUrlByTier(verify.badgeLevel);
     if (!badgeImageUrl) return;
 
@@ -260,7 +304,9 @@ async function handleCommentNode(node) {
         tag,
         badgeImageUrl,
         verify.verifiedDate,
-        verify.badgeLevel
+        verify.badgeLevel,
+        verify.description
+
     );
 }
 

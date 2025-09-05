@@ -22,20 +22,19 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MyBadgeService {
 
-    private final MemberRepository memberRepository;
     private final VerificationRepository verificationRepository;
     private final BadgeRepository badgeRepository;
+    private final AuthService authService;
+    private final MemberRepository memberRepository;
 
-    public MyBadgeResponseDto getMyBadge(Long userId){
-        Member member = memberRepository.findByUserId(userId) // FIXME : 로그인 구현 후 수정 예정
-                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+    public MyBadgeResponseDto getMyBadge(){
+        Member member = authService.getCurrentUser();
 
         Optional<Verification> verification = verificationRepository.findByUserId(member);
 
         if (verification.isEmpty()) { // 로그인만 되어있는 사용자 (제출X, 인증X)
             return new MyBadgeResponseDto(
                     member.getUsername(),
-                    member.getEmail(),
                     VerificationStatus.NOT_SUBMITTED
             );
         }
@@ -46,7 +45,6 @@ public class MyBadgeService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증O) -> 채널 연결 O / X
                 new MyBadgeResponseDto(
                         member.getUsername(),
-                        member.getEmail(),
                         verification.get().getStatus(),
                         value.getBadgeLevel(),
                         value.getVerifiedDate(),
@@ -56,15 +54,17 @@ public class MyBadgeService {
                 // 인증서 제출은 했지만 아직 인증 안된 사용자 (제출O, 인증 아직 or 거절)
                 new MyBadgeResponseDto(
                         member.getUsername(),
-                        member.getEmail(),
                         verification.get().getStatus()
                 ));
     }
 
-    public void connectChannel(String channelUrl, String email, Long userId){
-        Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+    @Transactional
+    public void connectChannel(String channelUrl, String email, Member member) {
+        // 외부(예: OAuth SuccessHandler)에서 특정 member를 넘겨줄 때 사용
+        connectChannelForMember(member, channelUrl, email);
+    }
 
+    private void connectChannelForMember(Member member, String channelUrl, String email) {
         Verification verification = verificationRepository.findByUserId(member)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
 
@@ -73,13 +73,10 @@ public class MyBadgeService {
 
         BadgeLevel badgeLevel = badge.getBadgeLevel();
 
-        // Todo : 이미 채널 연결되어있으면 에러처리 필요
-
+        // 태그 중복 방지
         String badgeTag;
-
         do {
             badgeTag = switch (badgeLevel) {
-                case SILVER -> "@veri-silver-" + RandomStringGenerator();
                 case GOLD -> "@veri-gold-" + RandomStringGenerator();
                 case PLATINUM -> "@veri-platinum-" + RandomStringGenerator();
                 case DIAMOND -> "@veri-diamond-" + RandomStringGenerator();
@@ -89,7 +86,6 @@ public class MyBadgeService {
 
         badge.connect(channelUrl, badgeTag, email);
         badgeRepository.save(badge);
-
     }
 
     public String RandomStringGenerator() {

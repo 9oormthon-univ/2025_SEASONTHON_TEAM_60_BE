@@ -41,7 +41,7 @@ public class BadgeInitializer implements CommandLineRunner {
 
         // 3. get verifiedTag
         String testEmail3 = "test3@example.com";
-        Member member3 = memberRepository.findByEmail(testEmail3)
+        Member member3 = memberRepository.findByUserId(3L)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification3 = verificationRepository.findByUserId(member3)
@@ -51,10 +51,14 @@ public class BadgeInitializer implements CommandLineRunner {
             Badge badge3 = new Badge(
                     verification3,
                     LocalDate.now(),
-                    BadgeLevel.SILVER,
-                    "Channel url 3",
-                    "@veri-silver-dhlske"
-            ); badgesToSave.add(badge3);
+                    BadgeLevel.GOLD,
+                    "www.youtube.com/@박승준-r3j",
+                    "@veri-gold-a1b2c3",
+                    testEmail3,
+                    "상위 20% 수익자"
+            );
+
+            badgesToSave.add(badge3);
         } else {
             log.info("{} 뱃지는 이미 존재합니다.", testEmail3);
         }

@@ -17,7 +17,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JwtGoogleProvider jwtGoogleProvider;
+    private final JwtKakaoProvider jwtKakaoProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -29,20 +30,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
-            if (jwtProvider.validateToken(token)) {
-                String email = jwtProvider.getEmail(token);
+            // 1. 구글 토큰인지 먼저 검증
+            if (jwtGoogleProvider.validateToken(token)) {
+                String email = jwtGoogleProvider.getEmail(token);
+                setAuthentication(email, request);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, null);
-
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 2. 구글 토큰이 아니라면 카카오 토큰인지 검증
+            } else if (jwtKakaoProvider.validateToken(token)) {
+                Long userId = jwtKakaoProvider.getUserId(token);
+                setAuthentication(userId, request);
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    // 공통 로직을 별도 메서드로 분리
+    private void setAuthentication(Object principal, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(principal, null, null);
+
+        authentication.setDetails(
+                new WebAuthenticationDetailsSource().buildDetails(request)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

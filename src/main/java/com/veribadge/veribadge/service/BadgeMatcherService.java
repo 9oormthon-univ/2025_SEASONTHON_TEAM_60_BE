@@ -26,6 +26,7 @@ public class BadgeMatcherService {
                 .badgeLevel(match.getBadgeLevel())
                 .valid(true)
                 .verifiedDate(match.getVerifiedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
+                .description(match.getDescription())
                 .build()
         ).orElseGet(() -> BadgeVerifyResponseDto.builder()
                 .valid(false)

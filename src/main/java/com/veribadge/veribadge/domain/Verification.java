@@ -32,10 +32,23 @@ public class Verification {
 
     private String deniedReason;
 
-    public Verification(Member userId, String certificateUrl, LocalDateTime submittedDate, VerificationStatus status){
+    private String description;
+
+    public Verification(Member userId, String certificateUrl){
         this.userId = userId;
         this.certificateUrl = certificateUrl;
-        this.submittedDate = submittedDate;
-        this.status = status;
+        this.submittedDate = LocalDateTime.now();
+        this.status = VerificationStatus.SUBMITTED;
+    }
+
+    public void admitVerification(Member userId, String description){
+        this.userId = userId;
+        this.description = description;
+        this.status = VerificationStatus.VERIFIED;
+    }
+    public void rejectVerification(Member userId, String deniedReason){
+        this.userId = userId;
+        this.deniedReason = deniedReason;
+        this.status = VerificationStatus.REJECTED;
     }
 }
