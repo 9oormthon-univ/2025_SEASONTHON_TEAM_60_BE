@@ -243,10 +243,11 @@ function extractChannelUrlFromNode(node) {
 }
 
 async function verifyWithBackend({ tag, channelUrl }) {
-    const endpoints = [
-        "http://localhost:8080/api/badge/verify",
-        "http://127.0.0.1:8080/api/badge/verify"
-    ];
+    const endpoint = "https://two025-seasonthon-team-60-be.onrender.com/api/badge/verify";
+    //const endpoints = [
+    //    "http://localhost:8080/api/badge/verify",
+    //    "http://127.0.0.1:8080/api/badge/verify"
+    //];
     for (const url of endpoints) {
         try {
             const res = await fetch(url, {
@@ -259,7 +260,10 @@ async function verifyWithBackend({ tag, channelUrl }) {
             console.log("[VeriBadge] 백엔드 응답:", json?.data);
             return json?.data || null;
 
-        } catch (_) {}
+        } catch (err) {
+            console.error("[VeriBadge] 서버 통신 오류:", err);
+            return null;
+        }
     }
     return null;
 }
