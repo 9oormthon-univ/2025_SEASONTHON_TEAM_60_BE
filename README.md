@@ -36,6 +36,7 @@
 - JPA
 - MySQL
 - Docker
+- Spring Security
 
 ### 인증 & 배포
 
