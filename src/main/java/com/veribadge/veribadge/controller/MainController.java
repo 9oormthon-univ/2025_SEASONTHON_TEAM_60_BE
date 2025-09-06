@@ -19,7 +19,11 @@ public class MainController {
 
     private final MainService mainService;
 
-    @Operation(summary = "나의 뱃지 관리 조회")
+
+    @Operation(
+            summary = "나의 뱃지 관리 조회",
+            description = "메인 대시보드에서 사용자의 뱃지 상태, 유튜브 채널 연동 정보, 인증 현황 등 종합적인 정보를 조회합니다."
+    )
     @GetMapping
     public Response<DashboardResponseDto> getMyBadge(){
         DashboardResponseDto dto = mainService.getMyBadge();
