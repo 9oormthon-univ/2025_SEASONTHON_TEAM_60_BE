@@ -1,11 +1,11 @@
-package com.veribadge.veribadge.mock;
+package com.veribadge.veribadge.config.mock;
 
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
 import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;

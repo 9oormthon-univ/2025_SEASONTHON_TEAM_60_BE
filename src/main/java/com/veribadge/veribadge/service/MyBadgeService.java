@@ -7,7 +7,7 @@ import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;

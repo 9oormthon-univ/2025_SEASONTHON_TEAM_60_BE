@@ -2,7 +2,7 @@ package com.veribadge.veribadge.controller;
 
 import com.veribadge.veribadge.dto.MyBadgeResponseDto;
 import com.veribadge.veribadge.exception.Response;
-import com.veribadge.veribadge.global.status.SuccessStatus;
+import com.veribadge.veribadge.common.status.SuccessStatus;
 import com.veribadge.veribadge.service.MyBadgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

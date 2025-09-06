@@ -1,6 +1,6 @@
 package com.veribadge.veribadge.exception;
 
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.mock;
+package com.veribadge.veribadge.config.mock;
 
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.enums.Role;

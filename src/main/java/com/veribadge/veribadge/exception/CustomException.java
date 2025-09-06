@@ -1,6 +1,6 @@
 package com.veribadge.veribadge.exception;
 
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import lombok.Getter;
 
 @Getter

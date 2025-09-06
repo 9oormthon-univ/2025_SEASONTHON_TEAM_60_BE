@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.global.status;
+package com.veribadge.veribadge.common.status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

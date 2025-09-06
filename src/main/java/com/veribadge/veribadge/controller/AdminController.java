@@ -2,11 +2,10 @@ package com.veribadge.veribadge.controller;
 
 import com.veribadge.veribadge.domain.enums.BadgeLevel;
 import com.veribadge.veribadge.exception.Response;
-import com.veribadge.veribadge.global.status.SuccessStatus;
+import com.veribadge.veribadge.common.status.SuccessStatus;
 import com.veribadge.veribadge.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

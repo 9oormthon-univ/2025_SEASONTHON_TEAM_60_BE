@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.jwt;
+package com.veribadge.veribadge.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
