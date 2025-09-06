@@ -70,7 +70,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
