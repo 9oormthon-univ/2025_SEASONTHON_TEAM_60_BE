@@ -27,7 +27,7 @@ public class AdminController {
 //    }
 
     @Operation(summary = "인증서 수락",
-               description = "인증서 파일이 소득 증명인 경우 설명칸을 비워두고, 의사 증명인 경우 병원, 전공에 대한 설명을 적어주세요." +
+               description = "인증서 파일이 소득 증명인 경우 설명칸을 비워두고, 의사 증명인 경우 병원, 전공에 대한 설명을 적어주세요" +
                        " ex) 서울아산병원 심장내과 전문의")
     @PostMapping("/admit/{userId}")
     public Response<Object> admitVerification(@PathVariable("userId") Long userId,
