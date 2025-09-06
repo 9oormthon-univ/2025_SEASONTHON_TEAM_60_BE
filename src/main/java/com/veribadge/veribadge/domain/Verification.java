@@ -35,6 +35,8 @@ public class Verification {
 
     private String description;
 
+
+
     @Column(nullable = false, unique = true, length = 64)
     private String fileId;
 

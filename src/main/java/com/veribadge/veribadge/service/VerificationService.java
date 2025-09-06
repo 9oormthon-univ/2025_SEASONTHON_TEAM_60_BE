@@ -4,6 +4,7 @@ import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
 import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.UploadVerificationResponseDto;
+import com.veribadge.veribadge.dto.certificatesResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.repository.MemberRepository;
@@ -21,6 +22,17 @@ public class VerificationService {
 
     private final MemberRepository memberRepository;
     private final VerificationRepository verificationRepository;
+
+    public certificatesResponseDto getVerificationStatus(Long userId){
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+        VerificationStatus status = verificationRepository.findByUserId_UserId(userId)
+                .map(Verification::getStatus) // 인증 요청이 있다면 그 상태(Status)를 가져옴
+                .orElse(VerificationStatus.NOT_SUBMITTED); // 인증 요청이 아예 없다면 '제출 안 함' 상태로 간주
+
+        // 3. DTO를 빌드하여 반환
+        return new certificatesResponseDto(status);
+    }
 
     @Transactional
     public UploadVerificationResponseDto processIncomeCertificateUpload(MultipartFile file, Long userId) {
