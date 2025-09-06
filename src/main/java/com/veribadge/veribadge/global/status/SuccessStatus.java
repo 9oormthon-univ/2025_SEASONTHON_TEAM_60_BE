@@ -27,8 +27,10 @@ public enum SuccessStatus {
     MY_BADGE_SUCCESS(HttpStatus.OK, "MYBADGE 200", "나의 뱃지 페이지 불러오기 성공"),
     CHANNEL_CONNECTED(HttpStatus.OK, "MYBADGE 200", "유튜브 채널 연결 성공"),
 
-    VERIFICATION_SUBMITTED(HttpStatus.OK, "COMMON 200", "파일 제출이 완료되었습니다. 검토가 시작됩니다.");
+    VERIFICATION_SUBMITTED(HttpStatus.OK, "COMMON 200", "파일 제출이 완료되었습니다. 검토가 시작됩니다."),
 
+    // Account
+    USER_ME_SUCCESS(HttpStatus.OK, "USER 200", "내 계정 정보 조회 성공");
 
     private final HttpStatus status;
     private final String code;
