@@ -27,7 +27,14 @@ public enum ErrorStatus {
 
     // Verification
     VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "인증을 찾을 수 없습니다."),
-    BADGE_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "뱃지를 찾을 수 없습니다.");
+    BADGE_NOT_FOUND(HttpStatus.NOT_FOUND, "VERI 404", "뱃지를 찾을 수 없습니다."),
+
+    // File Upload
+    FILE_EMPTY(HttpStatus.BAD_REQUEST, "FILE 400", "파일이 비어있습니다."),
+    FILE_TYPE_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "FILE 400", "지원하지 않는 파일 형식입니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "FILE 400", "파일 크기가 너무 큽니다."),
+    VERIFICATION_ALREADY_EXISTS(HttpStatus.CONFLICT, "VERI 409", "이미 제출된 인증이 있습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON 500", "서버 내부 오류가 발생했습니다.");
 
     private final HttpStatus status;
     private final String code;
