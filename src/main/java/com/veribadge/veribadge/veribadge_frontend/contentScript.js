@@ -243,25 +243,21 @@ function extractChannelUrlFromNode(node) {
 }
 
 async function verifyWithBackend({ tag, channelUrl }) {
-    const endpoints = [
-        "http://localhost:8080/api/badge/verify",
-        "http://127.0.0.1:8080/api/badge/verify"
-    ];
-    for (const url of endpoints) {
-        try {
-            const res = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ tag, channelUrl })
-            });
-            if (!res.ok) continue;
-            const json = await res.json();
-            console.log("[VeriBadge] 백엔드 응답:", json?.data);
-            return json?.data || null;
-
-        } catch (_) {}
+    const endpoint = "https://two025-seasonthon-team-60-be.onrender.com/api/badge/verify";
+    try {
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tag, channelUrl })
+        });
+        if (!res.ok) return null;
+        const json = await res.json();
+        console.log("[VeriBadge] 백엔드 응답:", json?.data);
+        return json?.data || null;
+    } catch (err) {
+        console.error("[VeriBadge] 서버 통신 오류:", err);
+        return null;
     }
-    return null;
 }
 
 /* -------------------- 5) 파이프라인 -------------------- */

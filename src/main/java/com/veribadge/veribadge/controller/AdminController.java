@@ -27,7 +27,7 @@ public class AdminController {
 //    }
 
     @Operation(summary = "인증서 수락",
-               description = "인증서 파일이 소득 증명인 경우 설명칸을 비워두고, 의사 증명인 경우 병원, 전공에 대한 설명을 적어주세요" +
+               description = "인증서 파일이 소득 증명인 경우 설명칸을 비워두고, 의사 증명인 경우 병원, 전공에 대한 설명을 적어주세요." +
                        " ex) 서울아산병원 심장내과 전문의")
     @PostMapping("/admit/{userId}")
     public Response<Object> admitVerification(@PathVariable("userId") Long userId,
@@ -37,7 +37,10 @@ public class AdminController {
         return Response.success(SuccessStatus.SUCCESS, null); // TODO : 성공 http 수정
     }
 
-    @Operation(summary = "인증서 거절")
+    @Operation(
+            summary = "인증서 거절",
+            description = "특정 사용자의 인증 요청을 거절합니다. 거절 사유(deniedReason)를 함께 입력해야 하며, 해당 사유는 사용자에게 전달됩니다."
+    )
     @PostMapping("/reject/{userId}")
     public Response<Object> rejectVerification(@PathVariable("userId") Long userId,
                                                @RequestParam("deniedReason") String deniedReason){
