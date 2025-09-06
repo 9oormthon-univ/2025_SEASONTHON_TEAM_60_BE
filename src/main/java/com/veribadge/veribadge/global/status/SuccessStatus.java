@@ -29,6 +29,8 @@ public enum SuccessStatus {
 
     VERIFICATION_SUBMITTED(HttpStatus.OK, "COMMON 200", "파일 제출이 완료되었습니다. 검토가 시작됩니다."),
 
+    VERIFICATION_STATUS(HttpStatus.OK,"VERIFICATION 200","상태 조회 성공"),
+
     // Account
     USER_ME_SUCCESS(HttpStatus.OK, "USER 200", "내 계정 정보 조회 성공");
 
