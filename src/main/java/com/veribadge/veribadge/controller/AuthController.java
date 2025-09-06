@@ -1,18 +1,11 @@
 package com.veribadge.veribadge.controller;
 
 import com.veribadge.veribadge.domain.Member;
-import com.veribadge.veribadge.domain.enums.Role;
-import com.veribadge.veribadge.dto.KakaoUserInfoDto;
-import com.veribadge.veribadge.dto.LoginResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.exception.Response;
-import com.veribadge.veribadge.global.status.ErrorStatus;
-import com.veribadge.veribadge.global.status.SuccessStatus;
-import com.veribadge.veribadge.jwt.JwtGoogleProvider;
-import com.veribadge.veribadge.jwt.JwtKakaoProvider;
+import com.veribadge.veribadge.common.status.ErrorStatus;
+import com.veribadge.veribadge.security.jwt.JwtKakaoProvider;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
-import com.veribadge.veribadge.service.social.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +20,6 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;

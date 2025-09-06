@@ -1,4 +1,4 @@
-package com.veribadge.veribadge.jwt;
+package com.veribadge.veribadge.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,22 +12,22 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtKakaoProvider {
+public class JwtGoogleProvider {
 
     private final SecretKey key;
 
     // 생성자를 통해 application-dev.yml의 jwt.secret 값을 주입받아 '마스터 키'를 생성합니다.
-    public JwtKakaoProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtGoogleProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(Long userId) {
+    public String generateToken(String email) {
         long now = System.currentTimeMillis();
         long validity = 1000L * 60 * 60; // 1시간
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject(email)
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + validity))
                 .signWith(key) // 이제 고정된 마스터 키로 서명합니다.
@@ -43,11 +43,10 @@ public class JwtKakaoProvider {
         }
     }
 
-    public Long getUserId(String token) {
-        String subject = Jwts.parserBuilder().setSigningKey(key).build()
+    public String getEmail(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-        return Long.valueOf(subject);
     }
 }

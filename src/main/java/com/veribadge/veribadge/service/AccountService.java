@@ -5,13 +5,11 @@ import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
 import com.veribadge.veribadge.dto.MyAccountResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service

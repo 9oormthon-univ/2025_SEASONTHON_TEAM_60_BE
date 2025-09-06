@@ -2,7 +2,7 @@ package com.veribadge.veribadge.service;
 
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

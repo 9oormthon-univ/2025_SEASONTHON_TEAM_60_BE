@@ -1,12 +1,10 @@
 package com.veribadge.veribadge.controller;
 
-import com.veribadge.veribadge.dto.MyBadgeResponseDto;
-import com.veribadge.veribadge.dto.UploadVerificationResponseDto;
 import com.veribadge.veribadge.dto.certificatesResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.exception.Response;
-import com.veribadge.veribadge.global.status.ErrorStatus;
-import com.veribadge.veribadge.global.status.SuccessStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.SuccessStatus;
 import com.veribadge.veribadge.service.VerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

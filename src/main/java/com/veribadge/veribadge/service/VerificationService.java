@@ -6,7 +6,7 @@ import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.UploadVerificationResponseDto;
 import com.veribadge.veribadge.dto.certificatesResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
-import com.veribadge.veribadge.global.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.repository.VerificationRepository;
 import jakarta.transaction.Transactional;

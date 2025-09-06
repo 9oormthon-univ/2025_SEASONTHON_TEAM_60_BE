@@ -1,8 +1,8 @@
 package com.veribadge.veribadge.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.veribadge.veribadge.global.status.ErrorStatus;
-import com.veribadge.veribadge.global.status.SuccessStatus;
+import com.veribadge.veribadge.common.status.ErrorStatus;
+import com.veribadge.veribadge.common.status.SuccessStatus;
 import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL) // null 값을 가지는 필드는 Json 응답에 미포함
