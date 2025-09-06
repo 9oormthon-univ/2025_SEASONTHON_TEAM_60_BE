@@ -6,6 +6,7 @@ import com.veribadge.veribadge.exception.Response;
 import com.veribadge.veribadge.global.status.ErrorStatus;
 import com.veribadge.veribadge.global.status.SuccessStatus;
 import com.veribadge.veribadge.service.VerificationService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,10 @@ public class VerificationController {
 
     private final VerificationService verificationService;
 
+    @Operation(
+            summary = "소득 증명 파일 업로드",
+            description = "JPG 또는 PNG 형식의 소득 증명 파일을 업로드합니다. 최대 10MB까지 지원하며, 인증 요청은 자동으로 제출됩니다."
+    )
     @PostMapping(
             value = "/income/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,

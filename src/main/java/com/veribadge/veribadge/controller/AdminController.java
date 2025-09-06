@@ -37,7 +37,10 @@ public class AdminController {
         return Response.success(SuccessStatus.SUCCESS, null); // TODO : 성공 http 수정
     }
 
-    @Operation(summary = "인증서 거절")
+    @Operation(
+            summary = "인증서 거절",
+            description = "특정 사용자의 인증 요청을 거절합니다. 거절 사유(deniedReason)를 함께 입력해야 하며, 해당 사유는 사용자에게 전달됩니다."
+    )
     @PostMapping("/reject/{userId}")
     public Response<Object> rejectVerification(@PathVariable("userId") Long userId,
                                                @RequestParam("deniedReason") String deniedReason){

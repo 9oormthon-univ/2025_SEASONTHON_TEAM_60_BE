@@ -2,6 +2,7 @@ package com.veribadge.veribadge.controller;
 
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,10 @@ public class ConnectController {
      * 구글 계정 연동을 시작하는 API입니다.
      * 이 API는 반드시 우리 서비스의 JWT(Access Token)를 헤더에 포함하여 호출해야 합니다.
      */
+    @Operation(
+            summary = "Google 계정 연동 시작",
+            description = "현재 로그인된 사용자 세션에 유저 ID를 저장한 뒤, Spring Security의 Google OAuth2 인증 페이지로 리디렉션합니다."
+    )
     @GetMapping("/auth/connect/google")
     public void connectGoogle(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 1. 현재 우리 서비스에 로그인된 사용자가 누구인지 확인합니다. (JWT 기반)

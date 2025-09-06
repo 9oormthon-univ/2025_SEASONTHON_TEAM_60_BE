@@ -13,6 +13,7 @@ import com.veribadge.veribadge.jwt.JwtKakaoProvider;
 import com.veribadge.veribadge.repository.MemberRepository;
 import com.veribadge.veribadge.service.social.GoogleService;
 import com.veribadge.veribadge.service.social.KakaoService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,10 @@ public class AuthController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
+    @Operation(
+            summary = "구글 사용자 정보 조회",
+            description = "OAuth2 인증 후 AccessToken을 사용하여 Google 사용자 정보를 가져옵니다. 로그인된 상태에서만 호출 가능합니다."
+    )
     @GetMapping("/google/get-user-info")
     public Map<String, Object> getUserInfo(OAuth2AuthenticationToken authentication) throws IOException {
 

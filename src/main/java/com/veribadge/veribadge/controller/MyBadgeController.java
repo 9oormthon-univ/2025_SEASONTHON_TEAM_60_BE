@@ -17,7 +17,11 @@ public class MyBadgeController {
 
     private final MyBadgeService myBadgeService;
 
-    @Operation(summary = "나의 뱃지 관리 조회")
+
+    @Operation(
+            summary = "나의 뱃지 상세 정보 조회",
+            description = "로그인한 사용자의 뱃지 발급 여부, 인증 태그, 인증 날짜, 채널 URL 등의 상세 정보를 조회합니다."
+    )
     @GetMapping
     public Response<MyBadgeResponseDto> getMyBadge(){
         MyBadgeResponseDto dto = myBadgeService.getMyBadge();
