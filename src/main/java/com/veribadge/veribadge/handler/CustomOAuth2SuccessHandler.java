@@ -119,7 +119,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                     + "&provider=kakao";
 
             String redirectUrl = UriComponentsBuilder
-                    .fromUriString(FRONTEND_BASE + "/auth/google/callback")
+                    .fromUriString(FRONTEND_BASE + "/auth/kakao/callback")
                     .fragment(fragment)
                     .build()
                     .toUriString();

@@ -24,7 +24,7 @@ public class ConnectController {
      */
     @Operation(
             summary = "Google 계정 연동 시작",
-            description = "현재 로그인된 사용자 세션에 유저 ID를 저장한 뒤, Spring Security의 Google OAuth2 인증 페이지로 리디렉션합니다."
+            description = "현재 로그인된 사용자 세션에 유저 ID를 저장한 뒤, Spring Security의 Google OAuth2 인증 페이지로 리디렉션합니다"
     )
     @GetMapping("/auth/connect/google")
     public void connectGoogle(HttpServletRequest request, HttpServletResponse response) throws IOException {
