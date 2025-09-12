@@ -3,6 +3,7 @@ package com.veribadge.veribadge.service;
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
+import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.MyAccountResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.common.status.ErrorStatus;
@@ -23,19 +24,23 @@ public class AccountService {
 
     public MyAccountResponseDto getMe() {
         Member member = authService.getCurrentUser();
+        String username = member.getUsername();
+        String channelUrl = null;
 
         //Member member = memberRepository.findById(3L)
         //        .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        Verification verification = verificationRepository.findByUserId(member)
-                .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
+        Verification verification = verificationRepository.findByUserId(member).orElse(null);
 
-        Badge badge = badgeRepository.findByVerificationId(verification)
-                .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
+        if(verification != null && verification.getStatus() == VerificationStatus.VERIFIED) {
+            Badge badge = badgeRepository.findByVerificationId(verification)
+                    .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
+            channelUrl = badge.getChannelUrl();
+        }
 
-        String channelUrl = badge.getChannelUrl();
-
-
-        return new MyAccountResponseDto(member.getUsername(), channelUrl);
+        return new MyAccountResponseDto(username, channelUrl);
     }
+
+
+
 }
