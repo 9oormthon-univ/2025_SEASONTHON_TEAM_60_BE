@@ -110,6 +110,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                     });
 
             String jwt = jwtKakaoProvider.generateToken(member.getUserId());
+            log.info(jwt);
 
             // 토큰은 프래그먼트(#)로 전달 → 리퍼러/로그에 남을 가능성 낮춤
             String fragment = "token=" + URLEncoder.encode(jwt, StandardCharsets.UTF_8)
