@@ -1,5 +1,6 @@
 package com.veribadge.veribadge.controller;
 
+import com.veribadge.veribadge.dto.UploadVerificationResponseDto;
 import com.veribadge.veribadge.dto.certificatesResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.exception.Response;
@@ -40,7 +41,7 @@ public class VerificationController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Void> uploadIncomeCertificate(
+    public Response<UploadVerificationResponseDto> uploadIncomeCertificate(
             @RequestParam("file") MultipartFile file,
             Authentication authentication) {
 
@@ -51,7 +52,8 @@ public class VerificationController {
 
         verificationService.processIncomeCertificateUpload(file, userId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        return Response.success(SuccessStatus.VERIFICATION_STATUS, null);
 
     }
 

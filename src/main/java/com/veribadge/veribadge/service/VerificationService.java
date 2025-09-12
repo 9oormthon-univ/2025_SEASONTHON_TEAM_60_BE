@@ -35,7 +35,7 @@ public class VerificationService {
     }
 
     @Transactional
-    public UploadVerificationResponseDto processIncomeCertificateUpload(MultipartFile file, Long userId) {
+    public void processIncomeCertificateUpload(MultipartFile file, Long userId) {
         // 1) 사용자
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
@@ -68,6 +68,6 @@ public class VerificationService {
         verificationRepository.save(verification);
 
         // 6) 응답
-        return UploadVerificationResponseDto.of(fileName, fileId, VerificationStatus.SUBMITTED);
+        //return UploadVerificationResponseDto.of(fileName, fileId, VerificationStatus.SUBMITTED);
     }
 }

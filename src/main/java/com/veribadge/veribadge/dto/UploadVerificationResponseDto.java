@@ -13,8 +13,4 @@ public class UploadVerificationResponseDto {
     private String fileName;
     private String fileId;
     private VerificationStatus status;
-
-    public static UploadVerificationResponseDto of(String fileName, String fileId, VerificationStatus status) {
-        return new UploadVerificationResponseDto(fileName, fileId, status);
-    }
 }
