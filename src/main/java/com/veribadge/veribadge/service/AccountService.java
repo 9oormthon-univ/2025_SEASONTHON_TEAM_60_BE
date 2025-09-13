@@ -20,15 +20,17 @@ public class AccountService {
     private final MemberRepository memberRepository; // 사용자 정보(username)
     private final BadgeRepository badgeRepository;   // 채널 URL 제공
     private final VerificationRepository verificationRepository;
-    private final AuthService authService;;
+    private final AuthService authService;
 
     public MyAccountResponseDto getMe() {
         Member member = authService.getCurrentUser();
+
+
+        //Member member = memberRepository.findById(1L)
+        //        .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
+
         String username = member.getUsername();
         String channelUrl = null;
-
-        //Member member = memberRepository.findById(3L)
-        //        .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
         Verification verification = verificationRepository.findByUserId(member).orElse(null);
 

@@ -43,6 +43,10 @@ public class Verification {
     @Column(nullable = false)
     private String fileName;
 
+    public void setStatus(VerificationStatus status) {
+        this.status = status;
+    }
+
     public Verification(Member userId, String fileId, String fileName, String certificateUrl){
         this.userId = userId;
         this.fileId = fileId;

@@ -90,7 +90,8 @@ public class SecurityConfig {
                                 "/login",
                                 "/admin/**",
                                 "/main",
-                                "/main/**"
+                                "/main/**",
+                                "/user/me"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

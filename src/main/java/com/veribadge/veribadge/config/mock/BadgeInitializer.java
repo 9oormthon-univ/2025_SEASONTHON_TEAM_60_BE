@@ -4,6 +4,7 @@ import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
 import com.veribadge.veribadge.domain.enums.BadgeLevel;
+import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.common.status.ErrorStatus;
 import com.veribadge.veribadge.repository.BadgeRepository;
@@ -46,6 +47,9 @@ public class BadgeInitializer implements CommandLineRunner {
 
         Verification verification3 = verificationRepository.findByUserId(member3)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
+
+        verification3.setStatus(VerificationStatus.VERIFIED);
+        verificationRepository.save(verification3);
 
         if (badgeRepository.findByVerificationId(verification3).isEmpty()) {
             Badge badge3 = new Badge(
