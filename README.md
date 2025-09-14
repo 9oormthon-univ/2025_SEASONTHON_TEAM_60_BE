@@ -47,8 +47,8 @@
 
 ### 인증 & 배포
 
-- OAuth2 (Google 로그인)
-- Rendor, Vercel
+- OAuth2 (Google, Kakao 로그인)
+- Rendor
 
 
 ## 🌳 프로젝트 구조
