@@ -3,6 +3,7 @@ package com.veribadge.veribadge.service;
 import com.veribadge.veribadge.domain.Badge;
 import com.veribadge.veribadge.domain.Member;
 import com.veribadge.veribadge.domain.Verification;
+import com.veribadge.veribadge.domain.enums.VerificationStatus;
 import com.veribadge.veribadge.dto.MyAccountResponseDto;
 import com.veribadge.veribadge.exception.CustomException;
 import com.veribadge.veribadge.common.status.ErrorStatus;
@@ -19,23 +20,29 @@ public class AccountService {
     private final MemberRepository memberRepository; // 사용자 정보(username)
     private final BadgeRepository badgeRepository;   // 채널 URL 제공
     private final VerificationRepository verificationRepository;
-    private final AuthService authService;;
+    private final AuthService authService;
 
     public MyAccountResponseDto getMe() {
         Member member = authService.getCurrentUser();
 
-        //Member member = memberRepository.findById(3L)
+
+        //Member member = memberRepository.findById(1L)
         //        .orElseThrow(() -> new CustomException(ErrorStatus.MEMBER_NOT_FOUND));
 
-        Verification verification = verificationRepository.findByUserId(member)
-                .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
+        String username = member.getUsername();
+        String channelUrl = null;
 
-        Badge badge = badgeRepository.findByVerificationId(verification)
-                .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
+        Verification verification = verificationRepository.findByUserId(member).orElse(null);
 
-        String channelUrl = badge.getChannelUrl();
+        if(verification != null && verification.getStatus() == VerificationStatus.VERIFIED) {
+            Badge badge = badgeRepository.findByVerificationId(verification)
+                    .orElseThrow(() -> new CustomException(ErrorStatus.BADGE_NOT_FOUND));
+            channelUrl = badge.getChannelUrl();
+        }
 
-
-        return new MyAccountResponseDto(member.getUsername(), channelUrl);
+        return new MyAccountResponseDto(username, channelUrl);
     }
+
+
+
 }
