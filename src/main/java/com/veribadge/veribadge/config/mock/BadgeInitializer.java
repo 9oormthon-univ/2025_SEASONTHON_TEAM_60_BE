@@ -48,7 +48,7 @@ public class BadgeInitializer implements CommandLineRunner {
         Verification verification3 = verificationRepository.findByUserId(member3)
                 .orElseThrow(() -> new CustomException(ErrorStatus.VERIFICATION_NOT_FOUND));
 
-        verification3.setStatus(VerificationStatus.VERIFIED);
+        verification3.markVerified();
         verificationRepository.save(verification3);
 
         if (badgeRepository.findByVerificationId(verification3).isEmpty()) {
