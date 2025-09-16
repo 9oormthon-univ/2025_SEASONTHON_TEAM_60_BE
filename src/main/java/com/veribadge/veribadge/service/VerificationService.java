@@ -48,7 +48,8 @@ public class VerificationService {
         if (contentType == null ||
                 !(contentType.equals("image/png")
                         || contentType.equals("image/jpeg")
-                        || contentType.equals("image/jpg"))) {
+                        || contentType.equals("image/jpg")
+                        || contentType.equals("application/pdf"))) {
             throw new CustomException(ErrorStatus.FILE_TYPE_NOT_SUPPORTED);
         }
         long maxSize = 10 * 1024 * 1024;
