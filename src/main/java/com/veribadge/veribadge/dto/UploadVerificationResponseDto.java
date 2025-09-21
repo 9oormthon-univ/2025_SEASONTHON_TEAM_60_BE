@@ -10,7 +10,7 @@ import lombok.Getter;
 @Schema(description = "파일 업로드 응답 DTO")
 public class UploadVerificationResponseDto {
 
-    private String fileName;
-    private String fileId;
-    private VerificationStatus status;
+    //private String fileName;
+   // private String fileId;
+    //private VerificationStatus status;
 }
